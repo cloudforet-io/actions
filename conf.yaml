@@ -1,0 +1,5 @@
+rTypes:
+  - name: backend-msa
+    repositories:
+      - name: test
+        url: github.com/spaceone-dev/action-submodule-test-identity

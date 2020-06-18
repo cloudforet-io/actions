@@ -1,0 +1,16 @@
+temp
+*.swp
+*.bak
+disk
+build
+*.egg-info
+*.egg
+*.whl
+*.log
+.idea
+__pycache__
+venv
+env
+local-conf.yml
+test/reports
+test/_trial_temp
