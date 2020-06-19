@@ -2,7 +2,8 @@ from git import Repo
 import os
 import yaml
 import shutil
-import requests
+from dotenv import load_dotenv
+load_dotenv()
 def git_push(repo ):
     try:
         repo.git.add(update=True)
@@ -47,7 +48,6 @@ def getRepositoryNamesToPush(rTypes, new, old):
         else:
             pass
     return rTypesToPullRequest
-    # rTypeToPullRequest = set([rType["name"] for rType in rTypes])
     
 def pullRequest(rTypes, rTypeNames):
     CLONE_PATH="temp"
@@ -72,16 +72,28 @@ def pullRequest(rTypes, rTypeNames):
                 print("This wouldn't matter")
             
             _repository = Repo.clone_from("https://"+repository["url"], CLONE_PATH, branch='master')
-            shutil.rmtree("/".join([CLONE_PATH, ".github", "workflows"]))
-            shutil.copytree(rTypeName, "/".join([CLONE_PATH, ".github", "workflows"]))
-            _repository.git.add("/".join([".github", "workflows"]), update=True)
+            COPY_SRC="/".join([rTypeName, "workflows"])
+            COPY_DEST="/".join([CLONE_PATH, ".github", "workflows"])
+            try:
+                shutil.rmtree(COPY_DEST)
+                print("deleted original github action directory. "+COPY_DEST)
+            except Exception as e:
+                print("Omit delete. no github action directory.")
+            shutil.copytree(COPY_SRC, COPY_DEST)
+            print("Git add path : ", COPY_DEST[len(CLONE_PATH) + 1:])
+            _repository.git.add(COPY_DEST[len(CLONE_PATH)+1:])
+
             _repository.index.commit("JINSU BOT")
+
             origin = _repository.remote(name='origin')
+            print(repository["url"])
+            origin.set_url("https://" + os.environ.get("GIT_USERNAME")+":"+os.environ.get("GIT_PASSWORD")+"@" + repository["url"])
             if os.environ.get("ENVIRONMENT") == "PRD":
                 origin.push()
+                print("Successfully pushed to "+repository["name"])
             else:
                 print("You don't push. Push only when the ENVIRONMENT is PRD")
-            shutil.rmtree(CLONE_PATH)
+            # shutil.rmtree(CLONE_PATH)
 
 repositoryTypes=getRepositoryTypes()
 print("===")

@@ -1,5 +1,9 @@
 rTypes:
-  - name: backend-msa
+  - name: development
     repositories:
-      - name: test
+      - name: action-submodule-test-identity
         url: github.com/spaceone-dev/action-submodule-test-identity
+  - name: console
+    repositories:
+      - name: console
+        url: github.com/spaceone-dev/console

@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  initialize:
+  deploy-actions:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,20 +16,20 @@ jobs:
       - name: Set environment virables
         env:
           DEPLOY: true # upload pypi if this is true
-          ENVIRONMENT: DEV # we don't push yet
+          ENVIRONMENT: PRD # we don't push yet
+
         run: |
           cat <<EOF>set_env.sh
           echo "::set-env name=DEPLOY::$DEPLOY"
           echo "::set-env name=ENVIRONMENT::$ENVIRONMENT"
           EOF
-
           cat set_env.sh
           bash set_env.sh
       - name: chores
         run: |
           ls -al
           pwd
-          
+
           git log
       - name: Set up Python
         if: env.DEPLOY == 'true'
@@ -40,11 +40,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
       - name: Execute python app
+        env:
+          GIT_USERNAME: ${{secrets.GIT_USERNAME}}
+          GIT_PASSWORD: ${{secrets.GIT_PASSWORD}}
         run: |
           python app.py
       # - name: Slack
-
-          
-              
