@@ -66,7 +66,6 @@ jobs:
           echo "::set-env name=IS_NEW_VERSION::false"
           cmp --silent master_branch/$LOCATION_VERSION/VERSION $LOCATION_VERSION/VERSION || \
           echo "::set-env name=IS_NEW_VERSION::true"
-
   pypi:
     if: github.repository_owner == 'spaceone-dev'
     needs: initialize
