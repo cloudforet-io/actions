@@ -2,22 +2,19 @@ from git import Repo
 import os
 import yaml
 import shutil
+import logging
+logging.basicConfig(level = logging.INFO)
 from dotenv import load_dotenv
 load_dotenv()
-def git_push(repo ):
-    try:
-        repo.git.add(update=True)
-        repo.index.commit("COMMIT_MESSAGE")
-        origin = repo.remote(name='origin')
-        origin.push()
-    except:
-        print('Some error occured while pushing the code') 
-# repo.git.add(update=True)
+logging.warn(os.environ.get("ENVIRONMENT"))
 
 def getRepositoryTypes(configurationFile="conf.yaml"):
+    logging.info("Configuration File : %s", configurationFile)
     with open(configurationFile) as y:
         rTypes=yaml.load(y)["rTypes"]
+    logging.info("Read rTypes from %s. rTypes : %s", configurationFile, str(rTypes))
     return rTypes
+
 def getCommits(gitPath="."):
     repo = Repo(gitPath) # using current directory .git
     new, old = repo.iter_commits(max_count=2)

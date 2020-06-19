@@ -6,4 +6,4 @@ rTypes:
   - name: console
     repositories:
       - name: console
-        url: github.com/spaceone-dev/console
+        url: github.com/umi0410/console
