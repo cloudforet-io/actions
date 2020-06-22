@@ -20,10 +20,10 @@ def getCommits(gitPath="."):
     return new, old
 
 
-def getRepositoryNamesToPush(rTypes, new, old):
+def getRepositoryTypeNamesToPush(rTypes, new, old):
     # only repository type names
     rTypeNames = set([rType["name"] for rType in rTypes])
-    rTypeNamesToPullRequest = set()
+    rTypeNamesToPush = set()
 
     for diff in old.diff(new):
         # print(diff)
@@ -33,21 +33,26 @@ def getRepositoryNamesToPush(rTypes, new, old):
         if _rTypeNameA in rTypeNames:
             logging.info("[Repoisotry Type] %s Changed.", _rTypeNameA)
             logging.info("changed file : %s", diff.a_path)
-            rTypeNamesToPullRequest.add(_rTypeNameA)
+            rTypeNamesToPush.add(_rTypeNameA)
         else:
             pass
 
         if _rTypeNameB in rTypeNames:
             logging.info("[Repoisotry Type] %s Changed", _rTypeNameB)
             logging.info("changed file : %s", diff.b_path)
-            rTypeNamesToPullRequest.add(_rTypeNameB)
+            rTypeNamesToPush.add(_rTypeNameB)
         else:
             pass
-    return rTypeNamesToPullRequest
+    logging.info("[Repository Types] to push - %s", str(rTypeNamesToPush))
+    return rTypeNamesToPush
 
-
+def getAllRepositories(rTypes):
+    repositories = []
+    for rType in rTypes:
+        repositories.append(rType["repositories"])
+    return repositories
 def filterReposToPush(rTypes, rTypeNames):
-    CLONE_PATH = "temp"
+    repositories = []
     # rTypeNames is a Set. This should not be duplicated
     for rTypeName in list(rTypeNames):
         rType = None

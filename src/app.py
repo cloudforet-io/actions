@@ -6,13 +6,14 @@ logging.basicConfig(level=logging.INFO)
 import gitFunctions as git
 
 CONF_LOCATION="conf.yaml"
+if(os.environ.get("ENVIRONMENT") == "DEV"):CONF_LOCATION="dev-conf.yaml"
 CLONE_PATH="temp"
 COPY_SRC=None # To be determined by repository
 COPY_DEST="/".join([CLONE_PATH,".github", "workflows"])
 GIT_ADD_PATH = COPY_DEST[len(CLONE_PATH)+1:]
 repositoryTypes=git.getRepositoryTypes(CONF_LOCATION)
 newCommit, oldCommit = git.getCommits()
-repositoryTypeNamesToPush=git.getRepositoryNamesToPush(repositoryTypes, newCommit, oldCommit)
+repositoryTypeNamesToPush=git.getRepositoryTypeNamesToPush(repositoryTypes, newCommit, oldCommit)
 
 repositoriesToPush = git.filterReposToPush(repositoryTypes, repositoryTypeNamesToPush)
 
