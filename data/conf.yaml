@@ -1,9 +1,0 @@
-rTypes:
-  - name: development
-    repositories:
-      - name: action-submodule-test-identity
-        url: github.com/spaceone-dev/action-submodule-test-identity
-  - name: console
-    repositories:
-      - name: console
-        url: github.com/umi0410/console

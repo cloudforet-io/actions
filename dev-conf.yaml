@@ -1,22 +1,9 @@
 rTypes:
   - name: backend
     repositories:
-#      - name: config
-#        url: github.com/spaceone-dev/config
-      - name: backend
+      - name: backend # this is identity
         url: github.com/spaceone-dev/action-dev-backend
-#      - name: inventory
-#        url: github.com/spaceone-dev/inventory
-#      - name: monitoring
-#        url: github.com/spaceone-dev/monitoring
-#      - name: plugin
-#        url: github.com/spaceone-dev/plugin
-#      - name: repository
-#        url: github.com/spaceone-dev/repository
-#      - name: secret
-#        url: github.com/spaceone-dev/secret
-#      - name: statistics
-#        url: github.com/spaceone-dev/statistics
+
   - name: console
     repositories:
       - name: console
