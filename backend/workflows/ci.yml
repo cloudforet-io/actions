@@ -5,6 +5,7 @@ on:
     branches:
       - master
 
+
 jobs:
   initialize:
     runs-on: ubuntu-latest
