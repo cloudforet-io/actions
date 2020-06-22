@@ -1,5 +1,5 @@
 rTypes:
-  - name: development
+  - name: backend
     repositories:
       - name: action-submodule-test-identity
         url: github.com/spaceone-dev/action-submodule-test-identity
