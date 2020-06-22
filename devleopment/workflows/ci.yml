@@ -1,5 +1,4 @@
 name: SpaceONE CI
-
 on:
   push:
     branches:
@@ -8,8 +7,6 @@ on:
 jobs:
   initialize:
     runs-on: ubuntu-latest
-
-
     steps:
       - uses: actions/checkout@v2
       - name: Set environment virables
@@ -66,7 +63,6 @@ jobs:
           echo "::set-env name=IS_NEW_VERSION::false"
           cmp --silent master_branch/$LOCATION_VERSION/VERSION $LOCATION_VERSION/VERSION || \
           echo "::set-env name=IS_NEW_VERSION::true"
-
   pypi:
     if: github.repository_owner == 'spaceone-dev'
     needs: initialize

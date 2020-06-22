@@ -1,0 +1,17 @@
+rTypes:
+  - name: backend
+    repositories:
+      - name: action-dev-backend
+        url: github.com/spaceone-dev/action-dev-backend
+  - name: console
+    repositories:
+      - name: console
+        url: github.com/spaceone-dev/action-test-console
+  - name: python-core
+    repositories:
+      - name: python-core
+        url: github.com/spaceone-dev/action-test-python-core
+  - name: api
+    repositories:
+      - name: python-core
+        url: github.com/spaceone-dev/action-test-api
