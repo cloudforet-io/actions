@@ -108,7 +108,7 @@ def push(repository, url, gitAddPath):
     origin.set_url(
         "https://" + os.environ.get("GIT_USERNAME") + ":" + os.environ.get("GIT_PASSWORD") + "@" + url)
     origin.push()
-    logging.info("Successfully pushed to " + url)
+    logging.info("[SUCCESS] Pushed to " + url)
 
 def removeData(path):
     shutil.rmtree(path)
