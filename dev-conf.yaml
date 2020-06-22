@@ -1,8 +1,8 @@
 rTypes:
   - name: backend
     repositories:
-      - name: action-dev-backend
-        url: github.com/spaceone-dev/action-dev-backend
+      - name: backend
+        url: github.com/spaceone-dev/backend
   - name: console
     repositories:
       - name: console
