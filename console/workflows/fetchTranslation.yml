@@ -16,7 +16,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-
   build:
     needs: [authorize]
     runs-on: ubuntu-latest

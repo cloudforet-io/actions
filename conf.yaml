@@ -1,9 +1,24 @@
 rTypes:
   - name: backend
     repositories:
-      - name: action-submodule-test-identity
-        url: github.com/spaceone-dev/action-submodule-test-identity
-#  - name: console
-#    repositories:
-#      - name: console
-#        url: github.com/umi0410/console
+      - name: config
+        url: github.com/spaceone-dev/config
+      - name: identity
+        url: github.com/spaceone-dev/identity
+#      - name: inventory
+#        url: github.com/spaceone-dev/inventory
+#      - name: monitoring
+#        url: github.com/spaceone-dev/monitoring
+#      - name: plugin
+#        url: github.com/spaceone-dev/plugin
+#      - name: repository
+#        url: github.com/spaceone-dev/repository
+#      - name: secret
+#        url: github.com/spaceone-dev/secret
+#      - name: statistics
+#        url: github.com/spaceone-dev/statistics
+
+  - name: console
+    repositories:
+      - name: console
+        url: github.com/spaceone-dev/action-dev-console

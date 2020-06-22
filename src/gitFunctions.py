@@ -26,7 +26,7 @@ def getRepositoryTypeNamesToPush(rTypes, new, old):
     rTypeNamesToPush = set()
 
     for diff in old.diff(new):
-        print(diff)
+        logging.info(diff)
         _rTypeNameA = diff.a_path.split("/")[0]
         _rTypeNameB = diff.b_path.split("/")[0]
         # A or B path has the path
@@ -72,9 +72,9 @@ def cloneRepository(repositoryName, repositoryUrl, clonePath):
         shutil.rmtree(clonePath)
         logging.info("Deleted CLONE_PATH. %s", clonePath)
     except Exception as e:
-        print(e)
-        print("Failed to delete CLONE_PATH")
-        print("This wouldn't matter")
+        logging.info(e)
+        logging.info("Failed to delete CLONE_PATH")
+        logging.info("This wouldn't matter")
     try:
         _repository = Repo.clone_from("https://" + repositoryUrl, clonePath, branch='master')
         logging.info("Cloned from %s", repositoryUrl)
