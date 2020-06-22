@@ -26,7 +26,7 @@ def getRepositoryTypeNamesToPush(rTypes, new, old):
     rTypeNamesToPush = set()
 
     for diff in old.diff(new):
-        print(diff)
+        logging.info(diff)
         _rTypeNameA = diff.a_path.split("/")[0]
         _rTypeNameB = diff.b_path.split("/")[0]
         # A or B path has the path
@@ -60,28 +60,31 @@ def filterReposToPush(rTypes, rTypeNames):
             if _rType["name"] == rTypeName:
                 rType = _rType
                 break
-        logging.info("Start a pull request job for repository-%s", rType["name"])
-        repositories = rType["repositories"]
-        for repo in repositories:
-            repo["rTypeName"] = rTypeName
+        _repositories = rType["repositories"]
+        for _repo in _repositories:
+            _repo["rTypeName"] = rTypeName
+            repositories.append(_repo)
+    logging.info("[Repository] filtered repos to push - %s", str(repositories))
     return repositories
 
 
 def cloneRepository(repositoryName, repositoryUrl, clonePath):
-    clonePath = "temp"
     try:
         shutil.rmtree(clonePath)
         logging.info("Deleted CLONE_PATH. %s", clonePath)
     except Exception as e:
-        print(e)
-        print("Failed to delete CLONE_PATH")
-        print("This wouldn't matter")
+        logging.info(e)
+        logging.info("Failed to delete CLONE_PATH")
+        logging.info("This wouldn't matter")
     try:
         _repository = Repo.clone_from("https://" + repositoryUrl, clonePath, branch='master')
         logging.info("Cloned from %s", repositoryUrl)
         return _repository
     except Exception as e:
         logging.warning("Already exists files or dirs. %s", clonePath)
+        _repository = Repo(clonePath)
+        return _repository
+
 
 
 def copyData(copySrc, copyDest):
@@ -105,12 +108,7 @@ def push(repository, url, gitAddPath):
     origin.set_url(
         "https://" + os.environ.get("GIT_USERNAME") + ":" + os.environ.get("GIT_PASSWORD") + "@" + url)
     origin.push()
-    logging.info("Successfully pushed to " + repository["name"])
-    # if os.environ.get("ENVIRONMENT") == "PRD":
-    #     origin.push()
-    #     logging.info("Successfully pushed to " + repository["name"])
-    # else:
-    #     logging.info("You don't push because your ENVIRONMENT is not PRD")
+    logging.info("[SUCCESS] Pushed to " + url)
 
 def removeData(path):
     shutil.rmtree(path)

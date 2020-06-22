@@ -1,8 +1,10 @@
 name: SpaceONE CI
+
 on:
   push:
     branches:
       - master
+
 
 jobs:
   initialize:
@@ -12,8 +14,8 @@ jobs:
       - name: Set environment virables
         env:
           IMAGE_PREFIX: spaceone
-          PYPI_UPLOAD: false # upload pypi if this is true
-          DOCKER_UPLOAD: false
+          PYPI_UPLOAD: true # upload pypi if this is true
+          DOCKER_UPLOAD: true
           # LOCATION points the parent directory
           LOCATION_SETUP_PY: src # optional. for pypi upload
           LOCATION_VERSION: src # the location for VERSION file (ex- . means the location of VERSION is ./VERSION)

@@ -1,17 +1,31 @@
 rTypes:
   - name: backend
     repositories:
+#      - name: config
+#        url: github.com/spaceone-dev/config
       - name: backend
-        url: github.com/spaceone-dev/backend
+        url: github.com/spaceone-dev/action-dev-backend
+#      - name: inventory
+#        url: github.com/spaceone-dev/inventory
+#      - name: monitoring
+#        url: github.com/spaceone-dev/monitoring
+#      - name: plugin
+#        url: github.com/spaceone-dev/plugin
+#      - name: repository
+#        url: github.com/spaceone-dev/repository
+#      - name: secret
+#        url: github.com/spaceone-dev/secret
+#      - name: statistics
+#        url: github.com/spaceone-dev/statistics
   - name: console
     repositories:
       - name: console
-        url: github.com/spaceone-dev/action-test-console
-  - name: python-core
-    repositories:
-      - name: python-core
-        url: github.com/spaceone-dev/action-test-python-core
-  - name: api
-    repositories:
-      - name: python-core
-        url: github.com/spaceone-dev/action-test-api
+        url: github.com/spaceone-dev/action-dev-console
+#  - name: python-core
+#    repositories:
+#      - name: python-core
+#        url: github.com/spaceone-dev/action-dev-python-core
+#  - name: api
+#    repositories:
+#      - name: python-core
+#        url: github.com/spaceone-dev/action-dev-api

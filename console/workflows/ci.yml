@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+
 jobs:
   initialize:
     if: github.repository_owner == 'spaceone-dev'
