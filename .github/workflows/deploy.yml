@@ -45,5 +45,5 @@ jobs:
           GIT_USERNAME: ${{secrets.GIT_USERNAME}}
           GIT_PASSWORD: ${{secrets.GIT_PASSWORD}}
         run: |
-          python app.py
+          python src/app.py
       # - name: Slack
