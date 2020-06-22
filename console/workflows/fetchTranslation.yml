@@ -4,6 +4,7 @@ on:
     - cron:  '0 17 * * *'
   watch:
     types: [started]
+
 jobs:
   authorize:
     if: github.repository_owner == 'spaceone-dev'

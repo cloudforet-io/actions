@@ -19,7 +19,6 @@ repositoriesToPush = git.filterReposToPush(repositoryTypes, repositoryTypeNamesT
 
 for repo in repositoriesToPush:
     COPY_SRC = "/".join([repo["rTypeName"], "workflows"])
-    logging.info("HERE")
     logging.info(repo)
     repoObj=git.cloneRepository(repo["name"], repo["url"], CLONE_PATH)
     git.copyData(COPY_SRC, COPY_DEST)

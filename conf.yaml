@@ -21,4 +21,4 @@ rTypes:
   - name: console
     repositories:
       - name: console
-        url: github.com/spaceone-dev/action-dev-console
+        url: github.com/spaceone-dev/console

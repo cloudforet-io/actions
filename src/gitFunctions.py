@@ -60,11 +60,12 @@ def filterReposToPush(rTypes, rTypeNames):
             if _rType["name"] == rTypeName:
                 rType = _rType
                 break
-        logging.info("Start a pull request job for repository-%s", rType["name"])
-        repositories = rType["repositories"]
-        for repo in repositories:
-            repo["rTypeName"] = rTypeName
-    return repositories
+        logging.info("Start a push job for repository-%s", rType["name"])
+        _repositories = rType["repositories"]
+        for _repo in _repositories:
+            _repo["rTypeName"] = rTypeName
+        _repositories.append(_repo)
+    return _repositories
 
 
 def cloneRepository(repositoryName, repositoryUrl, clonePath):
