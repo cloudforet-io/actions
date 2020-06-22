@@ -26,7 +26,7 @@ def getRepositoryTypeNamesToPush(rTypes, new, old):
     rTypeNamesToPush = set()
 
     for diff in old.diff(new):
-        # print(diff)
+        print(diff)
         _rTypeNameA = diff.a_path.split("/")[0]
         _rTypeNameB = diff.b_path.split("/")[0]
         # A or B path has the path
@@ -104,11 +104,13 @@ def push(repository, url, gitAddPath):
 
     origin.set_url(
         "https://" + os.environ.get("GIT_USERNAME") + ":" + os.environ.get("GIT_PASSWORD") + "@" + url)
-    if os.environ.get("ENVIRONMENT") == "PRD":
-        origin.push()
-        logging.info("Successfully pushed to " + repository["name"])
-    else:
-        logging.info("You don't push because your ENVIRONMENT is not PRD")
+    origin.push()
+    logging.info("Successfully pushed to " + repository["name"])
+    # if os.environ.get("ENVIRONMENT") == "PRD":
+    #     origin.push()
+    #     logging.info("Successfully pushed to " + repository["name"])
+    # else:
+    #     logging.info("You don't push because your ENVIRONMENT is not PRD")
 
 def removeData(path):
     shutil.rmtree(path)
