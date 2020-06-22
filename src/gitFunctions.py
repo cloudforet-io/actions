@@ -68,7 +68,6 @@ def filterReposToPush(rTypes, rTypeNames):
 
 
 def cloneRepository(repositoryName, repositoryUrl, clonePath):
-    clonePath = "temp"
     try:
         shutil.rmtree(clonePath)
         logging.info("Deleted CLONE_PATH. %s", clonePath)
@@ -82,6 +81,9 @@ def cloneRepository(repositoryName, repositoryUrl, clonePath):
         return _repository
     except Exception as e:
         logging.warning("Already exists files or dirs. %s", clonePath)
+        _repository = Repo(clonePath)
+        return _repository
+
 
 
 def copyData(copySrc, copyDest):
@@ -105,12 +107,7 @@ def push(repository, url, gitAddPath):
     origin.set_url(
         "https://" + os.environ.get("GIT_USERNAME") + ":" + os.environ.get("GIT_PASSWORD") + "@" + url)
     origin.push()
-    logging.info("Successfully pushed to " + repository["name"])
-    # if os.environ.get("ENVIRONMENT") == "PRD":
-    #     origin.push()
-    #     logging.info("Successfully pushed to " + repository["name"])
-    # else:
-    #     logging.info("You don't push because your ENVIRONMENT is not PRD")
+    logging.info("Successfully pushed to " + url)
 
 def removeData(path):
     shutil.rmtree(path)

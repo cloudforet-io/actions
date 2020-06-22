@@ -1,0 +1,49 @@
+name: SpaceONE Github Action Deploy
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 4 # define how many commits to fetch
+
+      - name: Set environment virables
+        env:
+          DEPLOY: true # upload pypi if this is true
+          ENVIRONMENT: DEV # we don't push yet
+
+        run: |
+          cat <<EOF>set_env.sh
+          echo "::set-env name=DEPLOY::$DEPLOY"
+          echo "::set-env name=ENVIRONMENT::$ENVIRONMENT"
+          EOF
+          cat set_env.sh
+          bash set_env.sh
+      - name: chores
+        run: |
+          ls -al
+          pwd
+
+          git log
+      - name: Set up Python
+        if: env.DEPLOY == 'true'
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Execute python app
+        env:
+          GIT_USERNAME: ${{secrets.GIT_USERNAME}}
+          GIT_PASSWORD: ${{secrets.GIT_PASSWORD}}
+        run: |
+          python src/app.py
+      # - name: Slack
