@@ -5,13 +5,18 @@ import logging
 logging.basicConfig(level=logging.INFO)
 import gitFunctions as git
 
-CONF_LOCATION="conf.yaml"
-if(os.environ.get("ENVIRONMENT") == "DEV"):CONF_LOCATION="dev-conf.yaml"
+# initialize variables
+CONFIGURATION_PATH=os.environ.get("CONFIGURATION_PATH", "NO_CONFIGURE")
+if(CONFIGURATION_PATH=="NO_CONFIGURE"):
+    logging.error("No configuration file. Use CONFIGURATION_PATH based on project root.")
+    exit(1)
 CLONE_PATH="temp"
 COPY_SRC=None # To be determined by repository
 COPY_DEST="/".join([CLONE_PATH,".github", "workflows"])
 GIT_ADD_PATH = COPY_DEST[len(CLONE_PATH)+1:]
-repositoryTypes=git.getRepositoryTypes(CONF_LOCATION)
+
+# start functions
+repositoryTypes=git.getRepositoryTypes(CONFIGURATION_PATH)
 newCommit, oldCommit = git.getCommits()
 repositoryTypeNamesToPush=git.getRepositoryTypeNamesToPush(repositoryTypes, newCommit, oldCommit)
 

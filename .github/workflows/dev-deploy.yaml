@@ -17,11 +17,13 @@ jobs:
         env:
           DEPLOY: true # upload pypi if this is true
           ENVIRONMENT: DEV # we don't push yet
+          CONFIGURATION_PATH: dev-conf.yaml
 
         run: |
           cat <<EOF>set_env.sh
           echo "::set-env name=DEPLOY::$DEPLOY"
           echo "::set-env name=ENVIRONMENT::$ENVIRONMENT"
+          echo "::set-env name=CONFIGURATION_PATH::$CONFIGURATION_PATH"
           EOF
           cat set_env.sh
           bash set_env.sh

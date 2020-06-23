@@ -44,3 +44,4 @@ rTypes:
 * **Option 2. Merge `dev` into `master`**
   * Use **squash** because it refers to two latest commits. If not, it wouldn't be able to fetch two latest desired commits. (i.e - you might refer to multiple garbage commits in `dev` branch.)
 * **Options 3. Just push to master**
+
