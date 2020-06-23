@@ -5,20 +5,33 @@ rTypes:
         url: github.com/spaceone-dev/config
       - name: identity
         url: github.com/spaceone-dev/identity
-#      - name: inventory
-#        url: github.com/spaceone-dev/inventory
-#      - name: monitoring
-#        url: github.com/spaceone-dev/monitoring
-#      - name: plugin
-#        url: github.com/spaceone-dev/plugin
-#      - name: repository
-#        url: github.com/spaceone-dev/repository
-#      - name: secret
-#        url: github.com/spaceone-dev/secret
-#      - name: statistics
-#        url: github.com/spaceone-dev/statistics
+      - name: inventory
+        url: github.com/spaceone-dev/inventory
+      - name: monitoring
+        url: github.com/spaceone-dev/monitoring
+      - name: plugin
+        url: github.com/spaceone-dev/plugin
+      - name: repository
+        url: github.com/spaceone-dev/repository
+      - name: secret
+        url: github.com/spaceone-dev/secret
+      - name: statistics
+        url: github.com/spaceone-dev/statistics
 
   - name: console
     repositories:
       - name: console
         url: github.com/spaceone-dev/console
+  - name: console-api
+    repositories:
+      - name: console-api
+        url: github.com/spaceone-dev/console-api
+  - name: api
+    repositories:
+      - name: api
+        url: github.com/spaceone-dev/api
+  - name: python-core
+    repositories:
+      - name: python-core
+        url: github.com/spaceone-dev/python-core
+

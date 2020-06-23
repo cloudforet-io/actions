@@ -15,8 +15,8 @@ jobs:
 
       - name: Set environment virables
         env:
-          DEPLOY: true # upload pypi if this is true
-          ENVIRONMENT: DEV # we don't push yet
+          DEPLOY: true # whether you will push to other branches
+          ENVIRONMENT: DEV
           CONFIGURATION_PATH: dev-conf.yaml
 
         run: |
@@ -48,4 +48,12 @@ jobs:
           GIT_PASSWORD: ${{secrets.GIT_PASSWORD}}
         run: |
           python src/app.py
-      # - name: Slack
+      - name: Slack
+        if: always()
+        uses: 8398a7/action-slack@v3.2.0
+        with:
+          status: ${{job.status}}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          author_name: Github Action Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
