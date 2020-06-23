@@ -32,6 +32,6 @@ rTypes:
         url: github.com/spaceone-dev/api
   - name: python-core
     repositories:
-      - name: console
+      - name: python-core
         url: github.com/spaceone-dev/python-core
 
