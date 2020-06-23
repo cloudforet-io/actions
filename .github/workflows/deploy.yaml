@@ -15,8 +15,8 @@ jobs:
 
       - name: Set environment virables
         env:
-          DEPLOY: true # upload pypi if this is true
-          ENVIRONMENT: PRD # we don't push yet
+          DEPLOY: true # whether you will push to other branches
+          ENVIRONMENT: PRD
           CONFIGURATION_PATH: conf.yaml
         run: |
           cat <<EOF>set_env.sh

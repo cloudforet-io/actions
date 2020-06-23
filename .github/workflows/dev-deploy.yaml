@@ -15,8 +15,8 @@ jobs:
 
       - name: Set environment virables
         env:
-          DEPLOY: true # upload pypi if this is true
-          ENVIRONMENT: DEV # we don't push yet
+          DEPLOY: true # whether you will push to other branches
+          ENVIRONMENT: DEV
           CONFIGURATION_PATH: dev-conf.yaml
 
         run: |
