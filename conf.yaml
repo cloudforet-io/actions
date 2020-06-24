@@ -30,8 +30,11 @@ rTypes:
     repositories:
       - name: api
         url: github.com/spaceone-dev/api
+  - name: api-doc
+    repositories:
+      - name: api-doc
+        url: github.com/spaceone-dev/api-doc
   - name: python-core
     repositories:
       - name: python-core
         url: github.com/spaceone-dev/python-core
-
