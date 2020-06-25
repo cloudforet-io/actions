@@ -1,5 +1,5 @@
 from git import Repo
-import os
+import os, subprocess
 import yaml
 import shutil
 import logging
@@ -77,8 +77,16 @@ def cloneRepository(repositoryName, repositoryUrl, clonePath):
         logging.info("Failed to delete CLONE_PATH")
         logging.info("This wouldn't matter")
     try:
+        _author_username = os.environ.get("AUTHOR_USERNAME", "ACTION_BOT")
+        _author_email = os.environ.get("AUTHOR_EMAIL", "NO_EMAIL")
+        _config_path = "/".join([clonePath, ".git", "config"])
+        logging.info("Author - %s/%s", _author_username, _author_email)
+
         _repository = Repo.clone_from("https://" + repositoryUrl, clonePath, branch='master')
         logging.info("Cloned from %s", repositoryUrl)
+        subprocess.call(["git", "config", "-f", _config_path, "user.name", _author_username])
+        subprocess.call(["git", "config", "-f", _config_path, "user.email", _author_email])
+
         return _repository
     except Exception as e:
         logging.warning("Already exists files or dirs. %s", clonePath)

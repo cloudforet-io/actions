@@ -16,13 +16,11 @@ jobs:
       - name: Set environment virables
         env:
           DEPLOY: true # whether you will push to other branches
-          ENVIRONMENT: DEV
           CONFIGURATION_PATH: dev-conf.yaml
 
         run: |
           cat <<EOF>set_env.sh
           echo "::set-env name=DEPLOY::$DEPLOY"
-          echo "::set-env name=ENVIRONMENT::$ENVIRONMENT"
           echo "::set-env name=CONFIGURATION_PATH::$CONFIGURATION_PATH"
           EOF
           cat set_env.sh
@@ -42,12 +40,33 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Request github api for author email
+        uses: octokit/request-action@v2.0.0
+        id: github_api
+        with:
+          route: GET /repos/:owner_with_repo/commits/:ref
+          owner_with_repo: ${{github.repository}}
+          ref: ${{github.sha}}
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set and show author email
+        env:
+          AUTHOR_EMAIL: ${{fromJson(steps.github_api.outputs.data).commit.author.email}}
+        run: |
+          echo [Author email] - $AUTHOR_EMAIL
+          echo "::set-env name=AUTHOR_EMAIL::$AUTHOR_EMAIL"
+
       - name: Execute python app
         env:
           GIT_USERNAME: ${{secrets.GIT_USERNAME}}
           GIT_PASSWORD: ${{secrets.GIT_PASSWORD}}
+          AUTHOR_EMAIL: ${{env.AUTHOR_EMAIL}}
+          AUTHOR_USERNAME: ${{github.actor}}
         run: |
           python src/app.py
+
       - name: Slack
         if: always()
         uses: 8398a7/action-slack@v3.2.0
