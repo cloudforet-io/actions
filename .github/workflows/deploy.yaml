@@ -47,7 +47,8 @@ jobs:
         with:
           route: GET /repos/:owner_with_repo/commits/:ref
           owner_with_repo: ${{github.repository}}
-
+          ref: ${{github.sha}}
+          
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set and show author email
