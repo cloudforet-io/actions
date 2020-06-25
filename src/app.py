@@ -5,6 +5,9 @@ import logging
 logging.basicConfig(level=logging.INFO)
 import gitFunctions as git
 
+
+
+
 # initialize variables
 CONFIGURATION_PATH=os.environ.get("CONFIGURATION_PATH", "NO_CONFIGURE")
 if(CONFIGURATION_PATH=="NO_CONFIGURE"):
