@@ -7,11 +7,7 @@ rTypes:
     repositories:
       - name: console
         url: github.com/spaceone-dev/action-dev-console
-  - name: python-core
+  - name: simple-pypi
     repositories:
-      - name: python-core
-        url: github.com/spaceone-dev/action-dev-python-core
-  - name: api
-    repositories:
-      - name: api
-        url: github.com/spaceone-dev/action-dev-api
+      - name: tester
+        url: github.com/umi0410/tester

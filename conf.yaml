@@ -34,7 +34,9 @@ rTypes:
     repositories:
       - name: api-doc
         url: github.com/spaceone-dev/api-doc
-  - name: python-core
+  - name: simple-pypi
     repositories:
       - name: python-core
         url: github.com/spaceone-dev/python-core
+      - name: tester
+        url: github.com/spaceone-dev/tester
