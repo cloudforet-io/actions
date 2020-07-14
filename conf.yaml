@@ -40,3 +40,7 @@ rTypes:
         url: github.com/spaceone-dev/python-core
       - name: tester
         url: github.com/spaceone-dev/tester
+  - name: helm
+    repositories:
+      - name: spaceone-helm
+        url: github.com/spaceone-dev/spaceone-helm
