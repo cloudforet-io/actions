@@ -11,3 +11,7 @@ rTypes:
     repositories:
       - name: tester
         url: github.com/umi0410/tester
+  - name: helm
+    repositories:
+      - name: spaceone-helm
+        url: github.com/umi0410/spaceone-helm
