@@ -84,7 +84,19 @@ jobs:
         run: |
           helm repo add spaceone-s3 s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH_CHART }}
           helm s3 push ./spaceone-*.tgz spaceone-s3 --force
+      - name: Fix index.yaml s3:// => https://
+        env:
+          S3_BUCKET_NAME: ${{ env.S3_BUCKET_NAME }}
+          ALTERNATIVE_HOST: "helm.stargate.spaceone.dev"
+        run: |
+          cd editIndexYaml
+          aws s3 cp s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH_CHART }}/index.yaml index.yaml
+          node index.js
 
+      - name: Upload fixed index.yaml to S3
+        run: |
+          cd editIndexYaml
+          aws s3 cp index.yaml s3://${{ env.S3_BUCKET_NAME }}/${{ env.S3_BUCKET_SUBPATH_CHART }}/index.yaml
 
       - uses: actions/setup-node@v1
         with:
