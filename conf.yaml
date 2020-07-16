@@ -17,6 +17,9 @@ rTypes:
         url: github.com/spaceone-dev/secret
       - name: statistics
         url: github.com/spaceone-dev/statistics
+      - name: tester
+        url: github.com/spaceone-dev/tester
+
 
   - name: console
     repositories:
