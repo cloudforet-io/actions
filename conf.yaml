@@ -1,49 +1,8 @@
 rTypes:
-  - name: backend
-    repositories:
-      - name: config
-        url: github.com/spaceone-dev/config
-      - name: identity
-        url: github.com/spaceone-dev/identity
-      - name: inventory
-        url: github.com/spaceone-dev/inventory
-      - name: monitoring
-        url: github.com/spaceone-dev/monitoring
-      - name: plugin
-        url: github.com/spaceone-dev/plugin
-      - name: repository
-        url: github.com/spaceone-dev/repository
-      - name: secret
-        url: github.com/spaceone-dev/secret
-      - name: statistics
-        url: github.com/spaceone-dev/statistics
-      - name: tester
-        url: github.com/spaceone-dev/tester
-
-
-  - name: console
-    repositories:
-      - name: console
-        url: github.com/spaceone-dev/console
-  - name: console-api
-    repositories:
-      - name: console-api
-        url: github.com/spaceone-dev/console-api
-  - name: api
-    repositories:
-      - name: api
-        url: github.com/spaceone-dev/api
-  - name: api-doc
-    repositories:
-      - name: api-doc
-        url: github.com/spaceone-dev/api-doc
-  - name: simple-pypi
-    repositories:
-      - name: python-core
-        url: github.com/spaceone-dev/python-core
-      - name: tester
-        url: github.com/spaceone-dev/tester
-  - name: helm
-    repositories:
-      - name: spaceone-helm
-        url: github.com/spaceone-dev/spaceone-helm
+  backend:
+    - name: spaceone-dev/config
+    - name: spaceone-dev/identity
+  console:
+    - name: spaceone-dev/console
+  plugin:
+    - name: spaceone-dev/plugin-azure-cloud-service-inven-collector
