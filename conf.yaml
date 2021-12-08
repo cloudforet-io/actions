@@ -5,4 +5,4 @@ rTypes:
   console:
     - name: spaceone-dev/console
   plugin:
-    - name: spaceone-dev/plugin-azure-cloud-service-inven-collector
+    - name: spaceone-dev/plugin-azure-vm-inven-collector
