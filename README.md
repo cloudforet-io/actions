@@ -50,14 +50,17 @@ rTypes:
 ```
 ├── README.md
 ├── backend
-│   └── workflows     ★ 이곳
-│       └── sample.yaml
+│   └── workflows     
+│       └── new.yaml    ★ 이곳
 ├── console
-│   └── workflows     ★ 이곳
-│       └── sample.yaml
+│   └── workflows     
+│       └── new.yaml    ★ 이곳
 ├── plugin
-│   └── workflows     ★ 이곳
-│       └── sample.yaml  
+│   └── workflows     
+│       └── new.yaml    ★ 이곳
+├── sample
+│   └── workflows
+│       └── sample.yaml ★ 샘플
 ├── conf.yaml
 ├── requirements.txt
 ├── src
