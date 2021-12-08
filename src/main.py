@@ -72,9 +72,12 @@ def get_config():
 def get_workflows(group):
     workflow_path = f'./{group}/workflows'
     workflow_names = os.listdir(workflow_path)
+    ignore = ['.gitkeep']
 
     github_actions = []
     for workflow_name in workflow_names:
+        if workflow_name in ignore:
+            continue
         github_action_set = {}
         with open(f'{workflow_path}/{workflow_name}','r') as f:
             body = f.read()
