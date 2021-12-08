@@ -19,19 +19,11 @@ def main():
         sys.exit(1)
 
     group = args.group
-<<<<<<< HEAD
     specified_repo = args.repo
 
     workflows = get_workflows(group)
     for repo in rTypes[group]:
         if specified_repo and repo['name'] != specified_repo:
-=======
-    specific_repo = args.repo
-
-    workflows = get_workflows(group)
-    for repo in rTypes[group]:
-        if specific_repo and repo['name'] != specific_repo:
->>>>>>> 87c15b0 (refactor: Add simple concept)
             continue
         repo_name = repo['name']
         update_file_in_repository(client, repo_name, workflows)
