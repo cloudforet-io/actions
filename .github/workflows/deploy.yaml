@@ -3,14 +3,12 @@ name: SpaceONE Github Action Deploy
 on:
   workflow_dispatch:
     inputs:
-      group:
-        description: '배포할 github_action group을 입력하세요.'
-        required: true
       repository:
-        description: '[option]특정 repository 지정.'
+        description: '특정 repository 지정.'
+        required: true
+      tag:
+        description: 'release tag'
         required: false
-  repository_dispatch:
-    types: [deploy_githubaction_workflows]
 
 jobs:
   deploy:
@@ -27,9 +25,32 @@ jobs:
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
       - name: deploy
         run: |
-          if [ ${{ github.event.inputs.repository }} ];
-          then
-            python src/main.py --group ${{ github.event.inputs.group }} --repo ${{ github.event.inputs.repository }}
-          else
-            python src/main.py --group ${{ github.event.inputs.group }}
-          fi
+          python src/main.py --repo ${{ github.event.inputs.repository }}
+
+  master_push:
+    runs-on: ubuntu-latest
+    if: ${{ !github.event.inputs.tag }}
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v2
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: ${{ github.event.inputs.repository }}
+          event-type: master_push
+
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.tag }}
+    needs: deploy
+    steps:
+      - uses: actions/checkout@v2
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: ${{ github.event.inputs.repository }}
+          event-type: release
+          client-payload: '{"tag": "${{ github.event.inputs.tag }}"}'
+
