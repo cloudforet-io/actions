@@ -1,47 +1,20 @@
 # actions
-중앙 집중형 github action workflow 관리 도구
+spaceone github action workflow 저장소
+
++ 2021/12/10 plugin 구현
 
 ## 개요
-spaceone MSA에 공통적으로 사용되는 github action workflow를 관리하고, 각 repository에 배포한다.<br>
-배포된 workflow는 각 repository에서 Trigger될 때 action의 deploy workflow를 호출하여 지속적으로 최신 상태를 유지할 수 있다.
+공통적으로 사용되는 github action workflow를 저장/관리한다.<br>
+각 repository에서 github action이 실행되면, 이 저장소에서 최신 상태의 workflow를 가져온 후 CI를 수행한다.
 
-<img src = "https://user-images.githubusercontent.com/19552819/145136525-608930c0-8ea4-44d0-a5db-a127a495fee1.png" width="50%" height="50%">
-
-
-## 사용 방법
-github action을 trigger하여 배포할 수 있다.
-- input
-  - [required]group : 동일한 workflow를 사용하는 group을 지정.
-  - [option]repository : 특정 repository만을 지정하고 싶을때 사용.
-![스크린샷 2021-12-08 오전 11 20 35](https://user-images.githubusercontent.com/19552819/145137059-251ecb7a-6279-471f-bb85-298c9ccf580e.png)
-
-### group에 대해
-spaceone-dev의 repository는 동일한 github action workflow를 사용하는 경우가 있다.<br>
-때문에 이러한 동일한 workflow를 사용하는 Repository를 group으로 묶고 deploy시에 이것을 활용한다.
-
-|group|repository|
-|---|---|
-|backend|spaceone-dev/inventory,identity,config,notification....|
-|plugin|spaceone-dev/plugin-aws...,plugin-google....,plugin-azure....   |
-|console|spaceone-dev/console|
-|console-api|spaceone-dev/console-api|
-
-## 설정
-
-### 배포 대상 repository 설정
-conf.yaml에 정의한다.<br>
-새로운 repository가 추가되거나, 관리 대상에서 벗어난 repository가 있다면, 이곳에서 추가/삭제를 하면된다.<br>
-
-```
-rTypes:                            
-  backend:                        # workflow group
-    - name: spaceone-dev/config   # repository name
-    - name: spaceone-dev/identity
-  console:
-    - name: spaceone-dev/console
-  plugin:
-    - name: spaceone-dev/plugin-azure-cloud-service-inven-collector
-```
+<img src = "https://user-images.githubusercontent.com/19552819/145518532-46ae01d4-5c23-4890-93f1-5b858c90cacf.png" width="80%" height="80%">
+1. plugin_xxx repository에서 github action trigger 발생<br>
+2. sync CI는 actions로 workflow를 요청한다<br>
+3. actions는 python script를 실행하여 요청한 repository에 알맞은 workflow를 찾는다<br>
+&nbsp;&nbsp;3-1. 이때, 해당 repository에 등록된 topic을 참고한다.(즉, 사전에 topic 설정이 필요하다.)<br>
+4. workflow를 찾으면 요청한 repository에 workflow를 commit(Create or Update)한다.<br>
+5. commit된 workflow를 trigger 한다.<br>
+6. image를 build하여 docker hub에 push한다.
 
 
 ### workflow 추가
@@ -52,26 +25,11 @@ rTypes:
 ├── backend
 │   └── workflows     
 │       └── new.yaml    ★ 이곳
-├── console
-│   └── workflows     
-│       └── new.yaml    ★ 이곳
 ├── plugin
 │   └── workflows     
 │       └── new.yaml    ★ 이곳
-├── sample
-│   └── workflows
-│       └── sample.yaml ★ 샘플
-├── conf.yaml
 ├── requirements.txt
 ├── src
 │   ├── main.py
 │   └── module
-└── venv
-    ├── bin
-    ├── lib
-    └── pyvenv.cfg
 ```
-
-### 새로운 group 추가
-새로운 group이 추가된다면, group 이름의 directory를 생성 후 workflows/<..>.yaml을 생성한다.<br>
-[update중...]
