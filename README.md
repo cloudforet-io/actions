@@ -16,8 +16,13 @@ spaceone github action workflow 저장소
 5. commit된 workflow를 trigger 한다.<br>
 6. image를 build하여 docker hub에 push한다.
 
+## 사용 방법
+관리하고자 하는 repository에 sync.yaml를 두면 자동으로 동기화 된다.<br>
+workflow를 actions에 추가하면 이후 sync.yaml가 있는 repository는 자동으로 workflow를 가져간다.
 
-### workflow 추가
+sync.yaml를 추가하는 방법은 manual로 추가할 수 있으나, 아래의 설명을 참고하여 python script를 이용할 수 있다. 
+
+## workflow 추가
 각 group의 workflows에 추가하고 싶은 workflow 파일을 추가해둔다.<br>
 추후 deploy workflow가 동작하면서, 새롭게 추가된 파일을 지정 repository에 추가해준다.
 ```
@@ -32,4 +37,24 @@ spaceone github action workflow 저장소
 ├── src
 │   ├── main.py
 │   └── module
+```
+## python script
+python github client library를 이용해 구현되었다.<br>
+manual로도 실행 가능하다.
+
+`--init` 옵션을 통해 sync.yaml 파일을 지정한 저장소에 commit할 수 있다.
+
+```
+usage: main.py [-h] --repo <owner/repo> [--init]
+
+File push to github repository
+
+optional arguments:
+  -h, --help           show this help message and exit
+  --repo <owner/repo>  Select specified repository.
+  --init               Deploy sync workflow only.
+
+Examples:
+    python src/main.py --repo spaceone/inventory
+    python src/main.py --repo spaceone/config --init
 ```
