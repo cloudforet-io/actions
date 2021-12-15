@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       repository:
-        description: '특정 repository 지정.'
+        description: 'target repository'
         required: true
       tag:
         description: 'release tag'
