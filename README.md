@@ -53,7 +53,9 @@ actions의 목적은 plugin 개발자들이 workflowr 관리에 신경쓰지 않
 actions의 init_deploy CI를 실행하여 sync.yaml를 배포할 수 있다.<br>
 init_deploy CI는 group을 input으로 받으며, 해당 group과 일치하는 topic을 가지고있는 모든 repository에 sync.yaml 배포된다.
 
-이때 기존 workflow는 모두 삭제되니, 중요한 workflow는 backup해둔다.
+이때 기존 workflow는 모두 삭제되니, 중요한 workflow는 backup해둔다.<br>
+(init_deploy CI는 각 저장소의 모든 workflow를 삭제하기 때문에, Protection이 걸려있다. 관리자 승인이 없다면 실행되지 않는다.)
+<img src = "https://user-images.githubusercontent.com/19552819/146351360-4c7209b7-d42f-4b09-9677-5c50d8377370.png" width="100%" height="100%">
 
 ## python script
 python github client library를 이용해 구현되었다.<br>
