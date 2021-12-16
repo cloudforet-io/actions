@@ -33,9 +33,9 @@ actions의 목적은 plugin 개발자들이 workflowr 관리에 신경쓰지 않
 때문에, actions를 통해 workflow를 관리하고 싶다면, sync.yaml를 해당 repository에 두는 것으로 모든 준비는 끝난다.
 
 #### 2-a. 처음 생성되는 repository에 sync.yaml 배포
-수동 배포 혹은 [template repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository)를 이용할 수 있다.
+수동 배포 혹은 [template repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository)를 활용할 수 있다.
 
-template repository의 경우, repository 생성 시 template repository 내용을 가져올 수 있다.
+template repository의 경우, repository 생성 시 template repository의 내용을 바탕으로 repository를 생성한다.
 
 #### 2-b. group과 일치하는 모든 저장소에 sync.yaml 배포
 actions의 init_deploy CI를 실행하여 sync.yaml를 배포할 수 있다.<br>
