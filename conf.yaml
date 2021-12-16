@@ -1,8 +1,0 @@
-rTypes:
-  backend:
-    - name: spaceone-dev/config
-    - name: spaceone-dev/identity
-  console:
-    - name: spaceone-dev/console
-  plugin:
-    - name: spaceone-dev/plugin-azure-vm-inven-collector
