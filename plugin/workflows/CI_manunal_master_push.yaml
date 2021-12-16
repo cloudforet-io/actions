@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  workflow_file_name: deploy.yml
-  owner: spaceone
+  workflow_file_name: deploy.yaml
+  owner: spaceone-dev
   repo: actions
   ref: master
 
