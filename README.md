@@ -27,11 +27,27 @@ actions의 목적은 plugin 개발자들이 workflowr 관리에 신경쓰지 않
   - public repository는 organization secret을 상속 받기때문에 별도의 설정은 필요없다.
   - private repository는 등록이 필요하다.
 
-### 2. workflow 동기화 설정
+### 2. workflow 동기화 설정(sync.yaml 배포)
 관리하고자 하는 repository에 sync.yaml를 두면 자동으로 actions의 workflow와 동기화 된다.<br>
 때문에, actions를 통해 workflow를 관리하고 싶다면, sync.yaml를 해당 repository에 두는 것으로 모든 준비는 끝난다.
 
-### 3. 새로운 workflow 추가
+#### 2-a. 처음 생성되는 repository에 sync.yaml 배포
+수동 배포 혹은 [template repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository)를 이용할 수 있다.
+
+template repository의 경우, repository 생성 시 template repository 내용을 가져올 수 있다.
+
+#### 2-b. group과 일치하는 모든 저장소에 sync.yaml 배포
+actions의 init_deploy CI를 실행하여 sync.yaml를 배포할 수 있다.<br>
+init_deploy CI는 group을 input으로 받으며, 해당 group과 일치하는 topic을 가지고있는 모든 repository에 sync.yaml 배포된다.
+
+이때 기존 workflow는 모두 삭제되니, 중요한 workflow는 backup해둔다.<br>
+**(init_deploy CI는 각 저장소의 모든 workflow를 삭제하기 때문에, Protection이 걸려있다. 관리자 승인이 없다면 실행되지 않는다.)**
+<img src = "https://user-images.githubusercontent.com/19552819/146351360-4c7209b7-d42f-4b09-9677-5c50d8377370.png" width="100%" height="100%">
+
+#### 2-c. actions의 python script를 이용해 단일 repository에 sync.yaml 배포
+아래의 python script 개요 참고.
+
+## 새로운 workflow 추가
 추가하고 싶은 workflow 파일을 actions의 workflow group에 추가해둔다.<br>
 이후 각 repository의 sync.yaml이 새롭게 추가된 workflow를 repository에 동기화해준다.<br>
 새로운 group이 생긴다면, 해당 group과 workflow를 추가하기만 하면 된다.(물론 각 repository는 topic이 필요하다.)
@@ -48,14 +64,6 @@ actions의 목적은 plugin 개발자들이 workflowr 관리에 신경쓰지 않
 │   ├── main.py
 │   └── module
 ```
-
-### 4. group과 일치하는 모든 저장소에 sync.yaml 배포
-actions의 init_deploy CI를 실행하여 sync.yaml를 배포할 수 있다.<br>
-init_deploy CI는 group을 input으로 받으며, 해당 group과 일치하는 topic을 가지고있는 모든 repository에 sync.yaml 배포된다.
-
-이때 기존 workflow는 모두 삭제되니, 중요한 workflow는 backup해둔다.<br>
-**(init_deploy CI는 각 저장소의 모든 workflow를 삭제하기 때문에, Protection이 걸려있다. 관리자 승인이 없다면 실행되지 않는다.)**
-<img src = "https://user-images.githubusercontent.com/19552819/146351360-4c7209b7-d42f-4b09-9677-5c50d8377370.png" width="100%" height="100%">
 
 ## python script
 python github client library를 이용해 구현되었다.<br>
