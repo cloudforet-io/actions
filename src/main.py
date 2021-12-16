@@ -6,7 +6,7 @@ logging.basicConfig(level=logging.INFO)
 ARGS = ap.parse_args()
 
 def main():
-    token = os.getenv('PAT_TOKEN', None)
+    token = os.getenv('PAT_TOKEN',None)
     if not token:
         logging.error('PAT_TOKEN does not set')
         sys.exit(1)
@@ -36,21 +36,20 @@ def main():
 def create_new_file_in_repository(repo, workflows):
     try:
         for workflow in workflows:
-            for path, content in workflow.items():
+            for path,content in workflow.items():
                 ret = repo.create_file(path=path, message="[CI] Deploy CI", content=content, branch="master")
                 logging.info(f'file has been created to {repo.full_name} : {ret}')
     except GithubException as e:
         logging.error(f'failed to file creation : {e}')
-        exit(1)
     except Exception as e:
         raise e
 
 def update_file_in_repository(repo, workflows):
     try:
         for workflow in workflows:
-            for path, content in workflow.items():
+            for path,content in workflow.items():
                 contents = repo.get_contents(path,ref="master")
-                ret = repo.update_file(path=contents.path, message="[CI] Update CI", content=content, sha=contents.sha, branch="master")
+                ret = repo.update_file(path=contents.path,message="[CI] Update CI",content=content,sha=contents.sha,branch="master")
                 logging.info(f'file has been updated in {repo.full_name} : {ret}')
     except UnknownObjectException as e:
         logging.warning(f'failed to update to {repo.full_name}: {e}')
