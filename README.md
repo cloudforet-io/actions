@@ -37,7 +37,7 @@ actions의 목적은 plugin 개발자들이 workflowr 관리에 신경쓰지 않
 
 template repository의 경우, repository 생성 시 template repository의 내용을 바탕으로 repository를 생성한다.
 
-#### 2-b. group과 일치하는 모든 저장소에 sync.yaml 배포
+#### 2-b. group과 일치하는 모든 기존 저장소에 sync.yaml 배포
 actions의 init_deploy CI를 실행하여 sync.yaml를 배포할 수 있다.<br>
 init_deploy CI는 group을 input으로 받으며, 해당 group과 일치하는 topic을 가지고있는 모든 repository에 sync.yaml 배포된다.
 
