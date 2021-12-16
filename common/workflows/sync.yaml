@@ -14,8 +14,8 @@ on:
         default: v1.0.0
 
 env:
-  workflow_file_name: deploy.yml
-  owner: spaceone
+  workflow_file_name: deploy.yaml
+  owner: spaceone-dev
   repo: actions
   ref: master
 
