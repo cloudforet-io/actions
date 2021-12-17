@@ -8,8 +8,8 @@ spaceone github action workflow 저장소
 spaceone의 repository가 사용하는 github action workflow의 저장소이다.<br>
 actions와 연동된 repository는 github action이 실행되면, 저장소에서 최신 상태의 workflow를 가져온 후 CI를 수행한다.
 
-github action workflow 저장소(actions)는 github action의 workflows를 한곳에 모아서 관리하기 하는 것을 목적으로 하며<br>
-plugin 개발자들이 workflow 변경를 신경쓰지 않고 CI를 수행할 수 있는 환경을 지향한다.
+actions는 github action의 workflows를 한곳에 모아서 관리하기 하는 것을 목적으로 하며,<br>
+plugin 개발자들이 workflow 변경을 신경쓰지 않고 CI를 수행할 수 있는 환경을 제공한다.
 
 <img src = "https://user-images.githubusercontent.com/19552819/145733993-a055947b-ee08-462f-ab9e-340cc47b0c4a.png" width="80%" height="80%">
 1. plugin_xxx repository에서 github action trigger 발생<br>
