@@ -5,10 +5,10 @@ spaceone github action workflow 저장소
 + 2021/12/16 init deploy 구현
 
 ## 개요
-공통적으로 사용되는 github action workflow를 저장/관리한다.<br>
-각 repository는 github action이 실행되면, 이 저장소에서 최신 상태의 workflow를 가져온 후 CI를 수행한다.
+github action workflow 저장소.<br>
+각 repository는 github action이 실행되면, 저장소에서 최신 상태의 workflow를 가져온 후 CI를 수행한다.
 
-actions의 목적은 plugin 개발자들이 workflowr 관리에 신경쓰지 않고 기존과 동일한 방법으로 배포할 수 있는 환경을 지향한다.<br>
+actions의 목적은 plugin 개발자들이 workflow 관리에 신경쓰지 않고 기존과 동일한 방법으로 배포할 수 있는 환경을 제공하기 위함이다.<br>
 
 <img src = "https://user-images.githubusercontent.com/19552819/145733993-a055947b-ee08-462f-ab9e-340cc47b0c4a.png" width="80%" height="80%">
 1. plugin_xxx repository에서 github action trigger 발생<br>
@@ -20,13 +20,15 @@ actions의 목적은 plugin 개발자들이 workflowr 관리에 신경쓰지 않
 6. 각 저장소에서 CI가 trigger되어 build가 시작된다.
 
 ## 설정 방법
+각 repository는 사전 설정을 수행한 후 sync.yaml을 통해 actions와 동기화된다.
 
 ### 1. 사전 설정
-- 각 개발 repository는 topic을 설정해둔다.<br>
+- 각 개발 repository의 topic을 설정해둔다.<br>
   - 해당 topic은 actions에 있는 workflow group와의 비교에 사용된다.
-- github action secret에 PAT_TOKEN 등록<br>
-  - public repository는 organization secret을 상속 받기때문에 별도의 설정은 필요없다.
-  - private repository는 등록이 필요하다.
+- github action secret에 PAT_TOKEN을 등록해둔다.<br>
+  - workflow 요청 및 Build 수행에 사용된다.
+    - public repository는 organization secret을 상속 받기때문에 별도의 설정은 필요없다.
+    - private repository는 등록이 필요하다.
 
 ### 2. workflow 동기화 설정(sync.yaml 배포)
 관리하고자 하는 repository에 sync.yaml를 두면 자동으로 actions의 workflow와 동기화 된다.<br>
