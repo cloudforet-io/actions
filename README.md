@@ -55,37 +55,46 @@ init_deploy CI는 group을 input으로 받으며, 해당 group과 일치하는 t
 추가하고 싶은 workflow 파일을 actions의 workflow group에 추가해둔다.<br>
 이후 각 repository의 sync.yaml이 새롭게 추가된 workflow를 repository에 동기화해준다.<br>
 새로운 group이 생긴다면, 해당 group과 workflow를 추가하기만 하면 된다.(물론 각 repository는 topic이 필요하다.)
+
 ```
+.
 ├── README.md
-├── backend             ★ workflow group
-│   └── workflows
-│       └── new.yaml    ★ 이곳
+├── backend
+│   └── workflows           ★ 이곳 아래
+├── common
+│   └── workflows
+│       └── sync_ci.yaml
 ├── plugin
-│   └── workflows     
-│       └── new.yaml    ★ 이곳
+│   └── workflows           ★ 이곳 아래
+│       ├── CI_manunal_master_push.yaml
+│       ├── CI_master_push.yaml
+│       └── CI_release.yaml
 ├── requirements.txt
-├── src
-│   ├── main.py
-│   └── module
+└── src
+    ├── main.py
+    └── module
 ```
 
 ## python script
 python github client library를 이용해 구현되었다.<br>
 manual로도 실행 가능하다.
 
-`--init` 옵션을 통해 sync.yaml 파일을 지정한 단일 저장소에 commit할 수 있다.(actions를 clone하여 사용한다.)
+`--init` 옵션을 통해 sync.yaml 파일을 지정한 단일 저장소 또는 저장소들에 commit할 수 있다.
 
 ```
-usage: main.py [-h] --repo <owner/repo> [--init]
+usage: main.py [-h] (--repo <owner/repo> | --group <group_name>) [--init]
 
 File push to github repository
 
 optional arguments:
-  -h, --help           show this help message and exit
-  --repo <owner/repo>  Select specified repository.
-  --init               Deploy sync workflow only.
+  -h, --help            show this help message and exit
+  --repo <owner/repo>   Select specified repository.
+  --group <group_name>  Select specified group.
+  --init                Deploy sync workflow only.
 
 Examples:
     python src/main.py --repo spaceone/inventory
     python src/main.py --repo spaceone/config --init
+    python src/main.py --group plugin
+    python src/main.py --group plugin --init
 ```
