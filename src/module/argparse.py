@@ -8,11 +8,18 @@ def parse_args():
             Examples:
                 python src/%(prog)s --repo spaceone/inventory
                 python src/%(prog)s --repo spaceone/config --init
+                python src/%(prog)s --group plugin
+                python src/%(prog)s --group plugin --init
         '''),
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
-    parser.add_argument('--repo', required=True, metavar='<owner/repo>',
+    group = parser.add_mutually_exclusive_group(required=True)
+
+    group.add_argument('--repo', metavar='<owner/repo>',
                         help='Select specified repository.')
+
+    group.add_argument('--group', metavar='<group_name>',
+                        help='Select specified group.')
 
     parser.add_argument('--init', action='store_true', default=False,
                         help='Deploy sync workflow only.')
