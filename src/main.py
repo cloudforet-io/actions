@@ -161,7 +161,7 @@ def _get_workflows(group):
     except FileNotFoundError as e:
         logging.error(e)
         sys.exit(1)
-    except Exception  as e:
+    except Exception as e:
         raise e
 
     workflows = []
