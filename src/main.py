@@ -109,7 +109,7 @@ def _get_all_repositories(group) -> list:
 
 def _group_match_filter(group, repositories) -> list:
     '''
-    Make sure the actual repository topic contains the deployment target group name.
+    Returns repositories that have topics matching groups
     '''
 
     result = []
