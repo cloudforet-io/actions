@@ -19,7 +19,11 @@ def main():
     else:
         sys.exit(1)
 
-def deploy_to_repository(client, repo_name, init):
+def deploy_to_repository(client, repo_name, init) -> None:
+    '''
+    Deploy workflows to single repository
+    '''
+
     repo = _get_repo(client, repo_name)
 
     if init:
@@ -30,7 +34,11 @@ def deploy_to_repository(client, repo_name, init):
 
     _deploy(repo, workflows, init)
 
-def deploy_to_group(client, group, init):
+def deploy_to_group(client, group, init) -> None:
+    '''
+    Deploy workflows to group(multiple repositories)
+    '''
+
     repo_names = _get_all_repositories(group)
 
     for repo_name in  repo_names:
@@ -43,14 +51,18 @@ def deploy_to_group(client, group, init):
 
         _deploy(repo, workflows, init)
 
-def _deploy(repo, workflows, init):
+def _deploy(repo, workflows, init) -> None:
     if init:
         _delete_all_workflows_in_repository(repo)
         _create_new_file_in_repository(repo, workflows)
     else:
         _update_file_in_repository(repo, workflows)
 
-def _get_token():
+def _get_token() -> str:
+    '''
+    get PAT_TOKEN from os environment
+    '''
+
     token = os.getenv('PAT_TOKEN',None)
     if not token:
         logging.error('PAT_TOKEN does not set')
@@ -58,13 +70,13 @@ def _get_token():
 
     return token
 
-def _get_client(token):
+def _get_client(token) -> object:
     try:
         return Github(token)
     except Exception as e:
         raise e
 
-def _get_repo(client, repo_name):
+def _get_repo(client, repo_name) -> object:
     try:
         return client.get_repo(repo_name)
     except UnknownObjectException as e:
@@ -73,7 +85,11 @@ def _get_repo(client, repo_name):
     except Exception as e:
         raise e
 
-def _get_all_repositories(group):
+def _get_all_repositories(group) -> list:
+    '''
+    get all repositories from github using github api
+    '''
+
     url = 'https://api.github.com/orgs/spaceone-dev/repos'
 
     headers = {
@@ -91,7 +107,11 @@ def _get_all_repositories(group):
 
     return _group_match_filter(group, response)
 
-def _group_match_filter(group, repositories):
+def _group_match_filter(group, repositories) -> list:
+    '''
+    Make sure the actual repository topic contains the deployment target group name.
+    '''
+
     result = []
     for repository in repositories:
         if group in repository['topics']:
@@ -103,7 +123,7 @@ def _group_match_filter(group, repositories):
 
     return result
 
-def _delete_all_workflows_in_repository(repo):
+def _delete_all_workflows_in_repository(repo) -> None:
     try:
         contents = repo.get_contents(".github/workflows", ref="master")
         for content in contents:
@@ -112,7 +132,7 @@ def _delete_all_workflows_in_repository(repo):
     except UnknownObjectException as e:
         print(e)
 
-def _create_new_file_in_repository(repo, workflows):
+def _create_new_file_in_repository(repo, workflows) -> None:
     try:
         for workflow in workflows:
             for path,content in workflow.items():
@@ -123,7 +143,7 @@ def _create_new_file_in_repository(repo, workflows):
     except Exception as e:
         raise e
 
-def _update_file_in_repository(repo, workflows):
+def _update_file_in_repository(repo, workflows) -> None:
     try:
         for workflow in workflows:
             for path,content in workflow.items():
@@ -137,7 +157,11 @@ def _update_file_in_repository(repo, workflows):
     except Exception as e:
         raise e
 
-def _get_group_compare_topics(repo):
+def _get_group_compare_topics(repo) -> str:
+    '''
+    Compare group(action directory) and actual repository topic to get matched group name
+    '''
+
     topics = repo.get_topics()
     groups = []
 
@@ -153,7 +177,7 @@ def _get_group_compare_topics(repo):
     logging.error('There are no matching topics in the workflow group!')
     sys.exit(1)
 
-def _get_workflows(group):
+def _get_workflows(group) -> list:
     try:
         workflow_path = f'./{group}/workflows'
         workflow_list = os.listdir(workflow_path)
@@ -173,7 +197,7 @@ def _get_workflows(group):
 
     return workflows
 
-def _read_workflows(workflow_path, workflow_name):
+def _read_workflows(workflow_path, workflow_name) -> dict:
     workflow_info = {}
     with open(f'{workflow_path}/{workflow_name}','r') as f:
         body = f.read()
