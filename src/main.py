@@ -25,7 +25,7 @@ def deploy_to_repository(client, repo_name, init):
     if init:
         workflows = _get_workflows('common')
     else:
-        group = _get_matching_group(repo)
+        group = _get_group_compare_topics(repo)
         workflows = _get_workflows(group)
 
     _deploy(repo, workflows, init)
@@ -137,7 +137,7 @@ def _update_file_in_repository(repo, workflows):
     except Exception as e:
         raise e
 
-def _get_matching_group(repo):
+def _get_group_compare_topics(repo):
     topics = repo.get_topics()
     groups = []
 
