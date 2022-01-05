@@ -62,12 +62,17 @@ jobs:
           then
             echo "Old minor version cannot be greater than new minor version"
             exit 1
-          elif [ ${{ env.old_patch }} \> ${{ env.new_patch }} ];
+          elif [ $old_patch ];
           then
-            echo "Old patch version cannot be greater than new patch version"
-            exit 1
+            if [ $old_patch \> $new_patch ]; 
+            then
+              echo "Old patch version cannot be greater than new patch version"
+              exit 1
+            else
+              echo "version=$new_version"
+            fi
           else
-            echo "version=${{ env.TAG }}"
+            echo "version=$new_version"
           fi
       - name: update version file
         run: |
