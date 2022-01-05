@@ -90,7 +90,7 @@ def _get_all_repositories(group) -> list:
     get all repositories from github using github api
     '''
 
-    url = 'https://api.github.com/orgs/spaceone-dev/repos'
+    url = 'https://api.github.com/orgs/spaceone-dev/repos?simple=yes&per_page=100&page=1'
 
     headers = {
         "Accept" : "application/vnd.github.v3+json"
