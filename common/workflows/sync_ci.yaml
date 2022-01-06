@@ -44,7 +44,7 @@ jobs:
     steps:
       - name: check version format
         run: |
-          if [[ !(${{ github.event.inputs.tag }} =~ ^v[0-9]\.[0-9]\.[0-9]?[0-9]$) ]];
+          if [[ !(${{ github.event.inputs.tag }} =~ ^v[0-9]\.[0-9]?[0-9]\.[0-9]?[0-9]$) ]];
           then
             echo "You entered an incorrect version format."
             exit 1
