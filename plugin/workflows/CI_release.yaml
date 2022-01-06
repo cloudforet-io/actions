@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: check version format
         run: |
-          if [[ !(${{ env.TAG }} =~ ^v[0-9]\.[0-9]\.[0-9]$) ]];
+          if [[ !(${{ env.TAG }} =~ ^v[0-9]\.[0-9]?[0-9]\.[0-9]?[0-9]$) ]];
           then
             echo "You entered an incorrect version format."
             exit 1
