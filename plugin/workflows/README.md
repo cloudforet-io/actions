@@ -4,12 +4,13 @@
 ```
 
 ## Workflows
-- [Push] Build Dev
+- [Push|Dispatch] Build dev
     - EVENT
         - When code is pushed to master
+            - (triggered by `[Push] Sync CI`)
+        - When the workflow is manually triggered
     - CONTENT
         - Build code and push docker image to pyengine
-        - (triggered by `[Push] Sync CI`)
 - [Dispatch] Release
     - EVENT
         - When the workflow is manually triggered
@@ -18,18 +19,18 @@
 - [Push] Sync CI
     - EVENT
         - When code is pushed to master
+            - (trigger `[Push] Build dev`)
     - CONTENT
-        - Get workflows from actions
-        - (trigger `[Push] Build dev` or `[Dispatch] Release`)
+        - Get workflows from actions and Trigger `[Push|Dispatch] Build dev`
 - [Dispatch] Sync CI
     - EVENT
         - When code is pushed to master
     - CONTENT
-        - Get workflows from actions
+        - Just get workflows from actions
 - [PR] Review (TODO)
 
 ## scenario
 - Release: `[Dispatch] Release`
-- Build Dev (CI): `[Push] Sync CI([Push] Build Dev)`
-- Build Dev (CD): `[Push] Build Dev`
-- Pull workflows: `[Dispatch] Sync CI`
+- Build Dev (CI): `[Push] Sync CI([Push|Dispatch] Build dev)`
+- Build Dev (CD): `[Push|Dispatch] Build dev`
+- Update workflows: `[Dispatch] Sync CI`
