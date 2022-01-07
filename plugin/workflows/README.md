@@ -24,7 +24,7 @@
         - Get workflows from actions and Trigger `[Push|Dispatch] Build dev`
 - `[Dispatch] Sync CI`
     - EVENT
-        - When code is pushed to master
+        - When the workflow is manually triggered
     - CONTENT
         - Just get workflows from actions
 - `[PR] Review (TODO)`
