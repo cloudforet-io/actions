@@ -29,8 +29,8 @@
         - Just get workflows from actions
 - `[PR] Review (TODO)`
 
-## scenario
+## Scenario
 - Release: `[Dispatch] Release`
-- Build Dev (CI): `[Push] Sync CI([Push|Dispatch] Build dev)`
-- Build Dev (CD): `[Push|Dispatch] Build dev`
+- Build Dev (Push): `[Push] Sync CI` -> `[Push|Dispatch] Build dev`
+- Build Dev (Dispatch): `[Push|Dispatch] Build dev`
 - Update workflows: `[Dispatch] Sync CI`
