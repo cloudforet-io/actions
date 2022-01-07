@@ -14,7 +14,7 @@
 - `[Dispatch] Release`
     - EVENT
         - When the workflow is manually triggered
-    - ACTION
+    - CONTENT
         - Build code and push docker image to pyengine and spaceone
 - `[Push] Sync CI`
     - EVENT
