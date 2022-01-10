@@ -1,7 +1,7 @@
 from github import Github
 from github.GithubException import UnknownObjectException,GithubException
 from module import argparse as ap
-import logging, os, sys, requests, json
+import logging, os, sys, requests, json, math
 logging.basicConfig(level=logging.INFO)
 ARGS = ap.parse_args()
 
@@ -90,22 +90,16 @@ def _get_all_repositories(group) -> list:
     get all repositories from github using github api
     '''
 
-    url = 'https://api.github.com/orgs/spaceone-dev/repos?simple=yes&per_page=100&page=1'
+    url = 'https://api.github.com/search/repositories?q=org:spaceone-dev'
+    org_info = _http_requests(url)
+    total_page = math.ceil(org_info['total_count']/100)
 
-    headers = {
-        "Accept" : "application/vnd.github.v3+json"
-    }
+    repositories = []
+    for page in range(1, total_page+1):
+        url = f'https://api.github.com/orgs/spaceone-dev/repos?simple=yes&per_page=100&page={page}'
+        repositories += _http_requests(url)
 
-    try:
-        response = requests.get(url, headers=headers).json()
-    except requests.exceptions.ConnectionError as e:
-        raise Exception(f'Connection Error {e.response}')
-    except requests.exceptions.HTTPError as e:
-        raise Exception(f'HTTP Error {e.response}')
-    except json.JSONDecodeError as e:
-        raise Exception(f'Json Decode Error {e}')
-
-    return _group_match_filter(group, response)
+    return _group_match_filter(group, repositories)
 
 def _group_match_filter(group, repositories) -> list:
     '''
@@ -206,6 +200,23 @@ def _read_workflows(workflow_path, workflow_name) -> dict:
     workflow_info[path] = body
 
     return workflow_info
+
+def _http_requests(url) -> list:
+
+    headers = {
+        "Accept" : "application/vnd.github.v3+json"
+    }
+
+    try:
+        response = requests.get(url, headers=headers).json()
+    except requests.exceptions.ConnectionError as e:
+        raise Exception(f'Connection Error {e.response}')
+    except requests.exceptions.HTTPError as e:
+        raise Exception(f'HTTP Error {e.response}')
+    except json.JSONDecodeError as e:
+        raise Exception(f'Json Decode Error {e}')
+
+    return response
 
 if __name__ == "__main__":
     main()
