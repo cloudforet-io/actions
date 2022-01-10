@@ -130,7 +130,7 @@ def _delete_all_workflows_in_repository(repo) -> None:
             message = f'CI: remove workflows ({content.path})'
             repo.delete_file(path=content.path, message=message, sha=content.sha, branch="master")
     except UnknownObjectException as e:
-        print(e)
+        logging.warning(e)
 
 def _create_new_file_in_repository(repo, workflows) -> None:
     try:
@@ -165,10 +165,11 @@ def _get_group_compare_topics(repo) -> str:
     topics = repo.get_topics()
     groups = []
 
-    list_dir = os.listdir('./')
-    for dir in list_dir:
-        if os.path.isdir(dir):
-            groups.append(dir)
+    # group list from current working dir
+    group_list = os.listdir('./')
+    for group in group_list:
+        if os.path.isdir(group):
+            groups.append(group)
 
     for topic in topics:
         if topic in groups:
@@ -181,7 +182,6 @@ def _get_workflows(group) -> list:
     try:
         workflow_path = f'./{group}/workflows'
         workflow_list = os.listdir(workflow_path)
-        not_workflow_file = ['.gitkeep']
     except FileNotFoundError as e:
         logging.error(e)
         sys.exit(1)
@@ -189,8 +189,9 @@ def _get_workflows(group) -> list:
         raise e
 
     workflows = []
+    ignore_files = ['.gitkeep']
     for workflow_name in workflow_list:
-        if workflow_name in not_workflow_file:
+        if workflow_name in ignore_files:
             continue
         full_workflow_info = _read_workflows(workflow_path, workflow_name)
         workflows.append(full_workflow_info)

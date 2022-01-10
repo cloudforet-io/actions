@@ -1,4 +1,4 @@
-name: "[Manual]master push"
+name: "[Dispatch] Sync_ci"
 
 on:
   workflow_dispatch:
@@ -10,7 +10,7 @@ env:
   ref: master
 
 jobs:
-  master_push:
+  pull_workflows:
     runs-on: ubuntu-latest
     steps:
       - name: git pull
@@ -22,6 +22,6 @@ jobs:
           workflow_file_name: ${{ env.workflow_file_name }}
           ref: ${{ env.ref }}
           wait_interval: 10
-          inputs: '{"repository" : "${{ github.repository }}"}'
+          inputs: '{"repository" : "${{ github.repository }}" , "sync_only" : "true"}'
           trigger_workflow: true
           wait_workflow: true

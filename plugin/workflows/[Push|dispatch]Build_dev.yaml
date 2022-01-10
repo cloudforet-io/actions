@@ -1,6 +1,7 @@
-name: "[CI]master push"
+name: "[Push|Dispatch] Build dev"
 
 on:
+  workflow_dispatch:
   repository_dispatch:
     types: [master_push]
 
