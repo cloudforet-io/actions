@@ -7,6 +7,7 @@ ARGS = ap.parse_args()
 
 def main():
     github = GithubConnector()
+    init = ARGS.init
 
     if ARGS.repo:
         repo_name = ARGS.repo
@@ -48,7 +49,7 @@ def deploy_to_group(github, group, init) -> None:
         else:
             workflows = _get_workflows(group)
 
-       github._deploy(repo, workflows, init)
+        github._deploy(repo, workflows, init)
 
 def _get_workflows(group) -> list:
     try:

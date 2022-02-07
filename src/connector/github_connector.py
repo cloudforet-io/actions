@@ -1,7 +1,8 @@
 from github import Github
 from github.GithubException import UnknownObjectException,GithubException
 
-import requests, json, math
+import requests, json, math, sys, os, logging
+logging.basicConfig(level=logging.INFO)
 
 class GithubConnector():
 
