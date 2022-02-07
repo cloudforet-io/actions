@@ -29,7 +29,7 @@ class GithubConnector():
       except Exception as e:
           raise e
 
-  def _get_all_repositories(self, group) -> list:
+  def _get_all_repositories(self) -> list:
       '''
       get all repositories from github using github api
       '''
