@@ -28,7 +28,7 @@ def deploy_to_repository(github, repo_name, init) -> None:
     if init:
         workflows = _get_workflows('common')
     else:
-        group = _get_group_compared_to_topics(repo)
+        group = _get_group(repo)
         workflows = _get_workflows(group)
 
     github._deploy(repo, workflows, init)
@@ -98,9 +98,9 @@ def _filter_match_repository_topics_to_group(group, repositories) -> list:
 
     return result
 
-def _get_group_compared_to_topics(repo) -> str:
+def _get_group(repo) -> str:
     '''
-    Compare group(action directory) and actual repository topic to get matched group name
+    Return group name which repository topic matches the directory.
     '''
 
     topics = repo.get_topics()
