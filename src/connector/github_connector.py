@@ -9,7 +9,7 @@ class GithubConnector():
   def __init__(self):
     self.client = self._get_client()
 
-  def _get_client(self, token) -> object:
+  def _get_client(self) -> object:
       token = os.getenv('PAT_TOKEN',None)
 
       if not token:

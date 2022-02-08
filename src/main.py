@@ -38,7 +38,7 @@ def deploy_to_group(github, group, init) -> None:
     Deploy workflows to group(multiple repositories)
     '''
 
-    all_repositories = github._get_all_repositories(group)
+    all_repositories = github._get_all_repositories()
     repo_names = _filter_match_repository_topics_to_group(group, all_repositories)
 
     for repo_name in  repo_names:
