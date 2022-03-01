@@ -26,10 +26,9 @@ There are two ways to deploy as follows.
 - Use [template repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-template-repository)
 - Execute github action of `actions`
   - [[CI] init group](https://github.com/spaceone-dev/actions/actions/workflows/init_group.yaml)
+    - need group name input and deploy `push_sync_ci.yaml` to all repositories that have topic matching the group.
   - [[CI] init repository](https://github.com/spaceone-dev/actions/actions/workflows/init_repository.yaml)
-
-`[CI] init group` need group name input and deploy `push_sync_ci.yaml` to all repositories that have topic matching the group.<br>
-`[CI] init repository` need repository name input and deploy `push_sync_ci.yaml` to repository that matched input.
+    - need repository name input and deploy `push_sync_ci.yaml` to repository that matched input.
 
 *) `group` is directory name in `Actions` and there are github action workflow
 
