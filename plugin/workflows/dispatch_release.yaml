@@ -74,6 +74,7 @@ jobs:
               exit 1
             else
               echo "version=${{ env.TAG }}"
+            fi
           else
             echo "version=${{ env.TAG }}"
           fi
