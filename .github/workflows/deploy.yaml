@@ -9,6 +9,10 @@ on:
       sync_only:
         description: 'sync only flag'
         required: false
+      type:
+        description: 'trigger type'
+        required: false
+
 
 jobs:
   deploy:
@@ -27,15 +31,24 @@ jobs:
         run: |
           python src/main.py --repo ${{ github.event.inputs.repository }}
 
-  master_push:
+  push:
     runs-on: ubuntu-latest
     if: ${{ !github.event.inputs.sync_only }}
     needs: deploy
     steps:
       - uses: actions/checkout@v2
       - name: Repository Dispatch
+        if: ${{ github.event.inputs.repository }} == "branch"
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repository: ${{ github.event.inputs.repository }}
           event-type: master_push
+      - name: Repository Dispatch
+        if: ${{ github.event.inputs.repository }} == "tag"
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repository: ${{ github.event.inputs.repository }}
+          event-type: branch_tagging
+
