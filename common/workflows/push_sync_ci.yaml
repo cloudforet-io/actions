@@ -18,8 +18,10 @@ env:
   ref: master
 
 jobs:
+  get_topic:
+    runs-on: ubuntu-latest
   master_push:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || ${{ github.repo_name != 'spaceone-intiailizer' }}
     runs-on: ubuntu-latest
     steps:
       - name: git pull - from branch
@@ -36,7 +38,7 @@ jobs:
           trigger_workflow: true
           wait_workflow: true
       - name: git pull - from tag
-        if: ${{ github.event.ref_type == 'tag' }} && ${{ github.repo_name != 'api' }} && ${{ github.repo_name != 'python-core' }}
+        if: ${{ github.event.ref_type == 'tag' }} && ${{ github.repo_name != 'api' }} && ${{ github.repo_name != 'python-core' }} && ${{ github.repo_name != 'spacectl' }}
         uses: convictional/trigger-workflow-and-wait@v1.3.0
         with:
           owner: ${{ env.owner }}
@@ -49,7 +51,7 @@ jobs:
           trigger_workflow: true
           wait_workflow: true
       - name: sync_only - from tag
-        if:  ${{ github.repo_name == 'api' }}
+        if:  ${{ github.repo_name == 'api' }} || ${{ github.repo_name == 'python-core' }} || ${{ github.repo_name == 'spacectl' }} && ${{ github.event.ref_type == 'tag' }}
         uses: convictional/trigger-workflow-and-wait@v1.3.0
         with:
           owner: ${{ env.owner }}
