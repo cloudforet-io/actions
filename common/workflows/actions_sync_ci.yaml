@@ -18,10 +18,8 @@ env:
   ref: master
 
 jobs:
-  get_topic:
-    runs-on: ubuntu-latest
   master_push:
-    if: github.event_name == 'push' || ${{ github.repo_name != 'spaceone-intiailizer' }}
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - name: git pull - from branch
@@ -37,21 +35,21 @@ jobs:
           inputs: '{"repository" : "${{ github.repository }}" , "type" : "branch"}'
           trigger_workflow: true
           wait_workflow: true
-      # - name: git pull - from tag
-      #   if: ${{ github.event.ref_type == 'tag' }} && ${{ github.repo_name != 'api' }} && ${{ github.repo_name != 'python-core' }} && ${{ github.repo_name != 'spacectl' }}
-      #   uses: convictional/trigger-workflow-and-wait@v1.3.0
-      #   with:
-      #     owner: ${{ env.owner }}
-      #     repo: ${{ env.repo }}
-      #     github_token: ${{ secrets.PAT_TOKEN }}
-      #     workflow_file_name: ${{ env.workflow_file_name }}
-      #     ref: ${{ env.ref }}
-      #     wait_interval: 10
-      #     inputs: '{"repository" : "${{ github.repository }} , "type" : "tag"}'
-      #     trigger_workflow: true
+      - name: git pull - from tag
+        if: ${{ github.event.ref_type == 'tag' }} && ${{ github.repo_name != 'api' }} && ${{ github.repo_name != 'python-core' }}
+        uses: convictional/trigger-workflow-and-wait@v1.3.0
+        with:
+          owner: ${{ env.owner }}
+          repo: ${{ env.repo }}
+          github_token: ${{ secrets.PAT_TOKEN }}
+          workflow_file_name: ${{ env.workflow_file_name }}
+          ref: ${{ env.ref }}
+          wait_interval: 10
+          inputs: '{"repository" : "${{ github.repository }} , "type" : "tag"}'
+          trigger_workflow: true
           wait_workflow: true
       - name: sync_only - from tag
-        if:  ${{ github.repo_name == 'api' }} || ${{ github.repo_name == 'python-core' }} || ${{ github.repo_name == 'spacectl' }} && ${{ github.event.ref_type == 'tag' }}
+        if:  ${{ github.event.ref_type == 'tag' }} && ${{ github.repo_name == 'api' }} || ${{ github.repo_name == 'python-core' }} || ${{ github.repo_name == 'spacectl' }}
         uses: convictional/trigger-workflow-and-wait@v1.3.0
         with:
           owner: ${{ env.owner }}
