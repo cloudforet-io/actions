@@ -1,11 +1,5 @@
-name: "[CI]create branch"
+name: "Release"
 on:
-  # workflow_dispatch:
-  #   inputs:
-  #     tag:
-  #       description: ' `x.y.z` 형태로 버전을 입력해주세요. v접두사와 -rc0 접미사는 자동으로 첨가됩니다.'
-  #       required: true
-  #       default: 1.2.3
   repository_dispatch:
     types: [create_release_branch]
 
@@ -30,8 +24,4 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           event-type: branch_tagging
           client-payload: '{"version": "${{ env.VERSION }}"}'
-© 2022 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
+

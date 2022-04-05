@@ -1,17 +1,11 @@
-name: "[CI]master push"
+name: "Build Dev"
 on:
-  push:
-    paths-ignore:
-      - '.github/**'
-      - 'deploy/helm/**'
-    branches:
-      - master
-
   workflow_dispatch:
+  repository_dispatch:
+    types: [master_push]
 
 env:
   ORGANIZATION: pyengine
-
 
 jobs:
   versioning:

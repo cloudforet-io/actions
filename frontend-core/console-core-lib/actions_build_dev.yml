@@ -1,10 +1,9 @@
-name: Release
+name: Build dev
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - master
-      - "[0-9]+.[0-9]+.x"
+  repository_dispatch:
+    types: [master_push]
+
 jobs:
   release:
     name: Release

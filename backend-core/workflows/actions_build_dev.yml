@@ -1,20 +1,28 @@
-name: "[CI]pypi dev test"
+name: "Build dev"
 on:
-  push:
-    branches:
-    - master
-    paths:
-    - 'proto/spaceone/api/**'
-  workflow_dispatch:
+  repository_dispatch: ## branch push가 일어날때는 sync만 진행됨.
+    types: [master_push]
+  workflow_dispatch:   ## pypi dev test는 manual로 진행 / API buffer에 path fileter가 걸려있어 manual로 전환
     inputs:
       tag:
         description: '`vx.y.z-deva` 형태로 버전을 입력해주세요.'
         required: true
         default: v1.2.3-dev1
+      type:
+        description: 'buff or api' ## type 지정을 통해 api 또는 buffer를 지정 / api만을 위해 wd를 수정해야하는가?
+        required: false
+        default: api
 
 jobs:
+  sync:
+    if: ${{ github.event_name }} == 'repository_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: sync
+        runs:
+          echo "sync"
   buff:
-    if: github.repository_owner == 'spaceone-dev' && "${{ github.event_name }}" == "push"
+    if: github.repository_owner == 'spaceone-dev' && github.event_name == 'workflow_dispatch' && ${{ github.event.inputs.type }} == 'buff'
     runs-on: ubuntu-latest
     env:
       SERVICE: api
@@ -84,7 +92,7 @@ jobs:
 
   condition_check:
     runs-on: ubuntu-latest
-    if: "${{ github.event_name }}" == "wd"
+    if: github.event_name == 'workflow_dispatch' && ${{ github.event.inputs.type }} == 'code'
     outputs:
       TAG: ${{ steps.set_env.outputs.TAG }}
     steps:
@@ -131,36 +139,6 @@ jobs:
         run: |
           cd dist/python
           twine upload dist/*.whl --username ${{ secrets.PYPI_USERNAME }} --password ${{ secrets.PYPI_PASSWORD }} --verbose
-
-  # docker:
-  #   needs: [condition_check, update_local_version_file, pypi]
-  #   if: github.repository_owner == 'spaceone-dev'
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     VERSION: ${{ needs.condition_check.outputs.TAG }}
-  #     BRANCH: ${{ needs.condition_check.outputs.BRANCH }}
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         ref: ${{ env.BRANCH }}
-  #     - name: versioning,determine repo
-  #       run: |
-  #         if [[ ${{ env.VERSION }} =~ v[0-9]\.[0-9]\.[0-9](.*)rc([0-9]|[1-9][0-9]) ]];
-  #           then echo "REPO=pyengine" >> $GITHUB_ENV
-  #           else echo "REPO=spaceone" >> $GITHUB_ENV
-  #         fi
-  #         echo "VERSION=$(echo ${{ env.VERSION }} | cut -c 2- | sed -e 's/-//g')" >> $GITHUB_ENV
-  #     - name: get service name
-  #       run: |
-  #         echo "SERVICE=$(echo ${{ github.repository }} | cut -d '/' -f2)" >> $GITHUB_ENV
-  #     - name: Upload docker, only version tag
-  #       uses: docker/build-push-action@v1
-  #       with:
-  #         path: .
-  #         repository: ${{ env.REPO }}/${{ env.SERVICE }}
-  #         username: ${{ secrets.DOCKER_USERNAME }}
-  #         password: ${{ secrets.DOCKER_PASSWORD }}
-  #         tags: ${{ env.VERSION }}
 
   notify_to_slack:
     if: github.repository_owner == 'spaceone-dev'

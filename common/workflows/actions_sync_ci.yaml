@@ -1,14 +1,17 @@
-name: "[Push] Sync CI"
+name: "Sync CI"
 
 on:
   push:
     branches:
       - master
+      - beta
+      - "[0-9]+.[0-9]+.x"
     tags:
       - "v*.*"
     paths-ignore:
       - '.github/**'
       - 'src/VERSION'
+      - 'deploy/helm/**'
   workflow_dispatch:
 
 env:
@@ -23,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: git pull - from branch
-        if: ${{ github.event.ref_type == 'branch' }} && ${{ github.repo_name != 'api' }} && ${{ github.repo_name != 'python-core' }}
+        if: ${{ github.event.ref_type == 'branch' }}
         uses: convictional/trigger-workflow-and-wait@v1.3.0
         with:
           owner: ${{ env.owner }}
@@ -36,7 +39,7 @@ jobs:
           trigger_workflow: true
           wait_workflow: true
       - name: git pull - from tag
-        if: ${{ github.event.ref_type == 'tag' }} && ${{ github.repo_name != 'api' }} && ${{ github.repo_name != 'python-core' }}
+        if: ${{ github.event.ref_type == 'tag' }}
         uses: convictional/trigger-workflow-and-wait@v1.3.0
         with:
           owner: ${{ env.owner }}
@@ -46,19 +49,6 @@ jobs:
           ref: ${{ env.ref }}
           wait_interval: 10
           inputs: '{"repository" : "${{ github.repository }} , "type" : "tag"}'
-          trigger_workflow: true
-          wait_workflow: true
-      - name: sync_only - from tag
-        if:  ${{ github.event.ref_type == 'tag' }} && ${{ github.repo_name == 'api' }} || ${{ github.repo_name == 'python-core' }} || ${{ github.repo_name == 'spacectl' }}
-        uses: convictional/trigger-workflow-and-wait@v1.3.0
-        with:
-          owner: ${{ env.owner }}
-          repo: ${{ env.repo }}
-          github_token: ${{ secrets.PAT_TOKEN }}
-          workflow_file_name: ${{ env.workflow_file_name }}
-          ref: ${{ env.ref }}
-          wait_interval: 10
-          inputs: '{"repository" : "${{ github.repository }}" , "sync_only" : "true"}'
           trigger_workflow: true
           wait_workflow: true
 
