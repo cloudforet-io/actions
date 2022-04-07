@@ -4,14 +4,13 @@ on:
   push:
     branches:
       - master
-      - beta
-      - "[0-9]+.[0-9]+.x"
     tags:
       - "v*.*"
     paths-ignore:
       - '.github/**'
-      - 'src/VERSION'
       - 'deploy/helm/**'
+      - 'proto/spaceone/api/**'
+      - 'src/VERSION'
   workflow_dispatch:
 
 env:
