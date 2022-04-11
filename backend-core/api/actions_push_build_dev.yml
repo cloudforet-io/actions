@@ -4,8 +4,6 @@ on:
   push:
     branches:
     - master
-    paths:
-    - 'proto/spaceone/api/**' # 삭제
 jobs:
   buff:
     if: github.repository_owner == 'spaceone-dev'
