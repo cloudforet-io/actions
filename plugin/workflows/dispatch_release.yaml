@@ -13,8 +13,15 @@ env:
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
 
 jobs:
-  condition_check:
+  owner_check:
+    if: github.repository_owner == 'spaceone-dev'
     runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.repository_owner }}
+  condition_check:
+    if: github.repository_owner == 'spaceone-dev'
+    runs-on: ubuntu-latest
+    needs: owner_check
     steps:
       - name: check version format
         run: |
@@ -119,7 +126,6 @@ jobs:
 
   docker:
     needs: tagging
-    if: github.repository_owner == 'spaceone-dev'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -154,7 +160,6 @@ jobs:
           author_name: Github Action Slack
 
   notification:
-    if: github.repository_owner == 'spaceone-dev'
     needs: docker
     runs-on: ubuntu-latest
     steps:

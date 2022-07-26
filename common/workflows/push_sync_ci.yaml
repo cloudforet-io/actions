@@ -17,9 +17,15 @@ env:
   ref: master
 
 jobs:
+  owner_check:
+    if: github.repository_owner == 'spaceone-dev'
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ github.repository_owner }}
   master_push:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    needs: owner_check
     steps:
       - name: git pull
         uses: convictional/trigger-workflow-and-wait@v1.3.0
@@ -36,6 +42,7 @@ jobs:
   pull_workflows:
     if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    needs: owner_check
     steps:
       - name: git pull
         uses: convictional/trigger-workflow-and-wait@v1.3.0
