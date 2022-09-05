@@ -35,13 +35,13 @@ class GithubConnector():
       get all repositories from github using github api
       '''
 
-      url = 'https://api.github.com/search/repositories?q=org:spaceone-dev'
+      url = 'https://api.github.com/search/repositories?q=org:cloudforet-io'
       org_info = self._http_requests(url)
       total_page = math.ceil(org_info['total_count']/100)
 
       repositories = []
       for page in range(1, total_page+1):
-          url = f'https://api.github.com/orgs/spaceone-dev/repos?simple=yes&per_page=100&page={page}'
+          url = f'https://api.github.com/orgs/cloudforet-io/repos?simple=yes&per_page=100&page={page}'
           repositories += self._http_requests(url)
 
       return repositories
