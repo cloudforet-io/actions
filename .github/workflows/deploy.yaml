@@ -15,6 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: set git user
+        run : git config --global user.email cloudforet-cicd@megazone.com
       - name: set python
         uses: actions/setup-python@v2
         with:
@@ -33,6 +35,8 @@ jobs:
     needs: deploy
     steps:
       - uses: actions/checkout@v2
+      - name: set git user
+        run : git config --global user.email cloudforet-cicd@megazone.com
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
         with:
