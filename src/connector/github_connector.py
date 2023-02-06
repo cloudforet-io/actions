@@ -1,13 +1,15 @@
 from github import Github
 from github.GithubException import UnknownObjectException,GithubException
 
-import requests, json, math, sys, os, logging
+import requests, json, math, sys, os, logging, github
 logging.basicConfig(level=logging.INFO)
 
-class GithubConnector():
+
+class GithubConnector:
 
   def __init__(self):
     self.client = self._get_client()
+    self._committer = github.InputGitAuthor(name='admin-cloudforet', email='admin@cloudforet.io')
 
   def _get_client(self) -> object:
       token = os.getenv('PAT_TOKEN',None)
@@ -51,7 +53,7 @@ class GithubConnector():
           contents = repo.get_contents(".github/workflows", ref="master")
           for content in contents:
               message = f'CI: remove workflows ({content.path})'
-              repo.delete_file(path=content.path, message=message, sha=content.sha, branch="master")
+              repo.delete_file(path=content.path, message=message, sha=content.sha, branch="master", committer=self._committer)
       except UnknownObjectException as e:
           logging.warning(e)
 
@@ -59,7 +61,7 @@ class GithubConnector():
       try:
           for workflow in workflows:
               for path,content in workflow.items():
-                  ret = repo.create_file(path=path, message="[CI] Deploy CI", content=content, branch="master")
+                  ret = repo.create_file(path=path, message="[CI] Deploy CI", content=content, branch="master", committer=self._committer)
                   logging.info(f'file has been created to {repo.full_name} : {ret}')
       except GithubException as e:
           logging.error(f'failed to file creation : {e}')
@@ -71,7 +73,7 @@ class GithubConnector():
           for workflow in workflows:
               for path,content in workflow.items():
                   contents = repo.get_contents(path,ref="master")
-                  ret = repo.update_file(path=contents.path,message="[CI] Update CI",content=content,sha=contents.sha,branch="master")
+                  ret = repo.update_file(path=contents.path, message="[CI] Update CI", content=content, sha=contents.sha, branch="master", committer=self._committer)
                   logging.info(f'file has been updated in {repo.full_name} : {ret}')
       except UnknownObjectException as e:
           logging.warning(f'failed to update to {repo.full_name}: {e}')
