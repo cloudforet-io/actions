@@ -7,8 +7,8 @@ def parse_args():
         description='File push to github repository',
         epilog=textwrap.dedent('''\
             Examples:
-                python src/%(prog)s --repo spaceone/inventory
-                python src/%(prog)s --repo spaceone/config --init
+                python src/%(prog)s --repo cloudforet-io/inventory
+                python src/%(prog)s --repo cloudforet-io/config --init
                 python src/%(prog)s --group plugin
                 python src/%(prog)s --group plugin --init
         '''),

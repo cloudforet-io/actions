@@ -76,9 +76,11 @@ class GithubConnector:
             for workflow in workflows:
                 for path, content in workflow.items():
                     contents = repo.get_contents(path, ref="master")
-                    ret = repo.update_file(path=contents.path, message="[CI] Update CI", content=content,
-                                           sha=contents.sha, branch="master", committer=self._committer)
-                    logging.info(f'file has been updated in {repo.full_name} : {ret}')
+                    if self._is_updated(contents, content):
+                        ret = repo.update_file(path=contents.path, message="[CI] Update CI", content=content,
+                                               sha=contents.sha, branch="master", committer=self._committer)
+                        logging.info(f'file has been updated in {repo.full_name} : {ret}')
+                logging.info(f'Nothing to do, There are no change in {repo.full_name}')
         except UnknownObjectException as e:
             logging.warning(f'failed to update to {repo.full_name}: {e}')
             logging.warning("The file may not exist, try to create a file.")
@@ -93,7 +95,8 @@ class GithubConnector:
         else:
             self._update_file_in_repository(repo, workflows)
 
-    def _http_requests(self, url) -> list:
+    @staticmethod
+    def _http_requests(url) -> list:
         headers = {
             "Accept": "application/vnd.github.v3+json"
         }
@@ -108,3 +111,12 @@ class GithubConnector:
             raise Exception(f'Json Decode Error {e}')
 
         return response
+
+    @staticmethod
+    def _is_updated(contents, workflow):
+        contents = contents.decoded_content.decode('utf-8')
+
+        if contents == workflow:
+            return False
+
+        return True
