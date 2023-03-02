@@ -2,8 +2,10 @@ from module import argparse as ap
 from connector.github_connector import GithubConnector
 
 import logging, os, sys
+
 logging.basicConfig(level=logging.INFO)
 ARGS = ap.parse_args()
+
 
 def main():
     github = GithubConnector()
@@ -17,6 +19,7 @@ def main():
         deploy_to_group(github, group, init)
     else:
         sys.exit(1)
+
 
 def deploy_to_repository(github, repo_name, init) -> None:
     '''
@@ -33,6 +36,7 @@ def deploy_to_repository(github, repo_name, init) -> None:
 
     github._deploy(repo, workflows, init)
 
+
 def deploy_to_group(github, group, init) -> None:
     '''
     Deploy workflows to group(multiple repositories)
@@ -41,7 +45,7 @@ def deploy_to_group(github, group, init) -> None:
     all_repositories = github._get_all_repositories()
     repo_names = _filter_match_repository_topics_to_group(group, all_repositories)
 
-    for repo_name in  repo_names:
+    for repo_name in repo_names:
         repo = github._get_repo(repo_name)
 
         if init:
@@ -50,6 +54,7 @@ def deploy_to_group(github, group, init) -> None:
             workflows = _get_workflows(group)
 
         github._deploy(repo, workflows, init)
+
 
 def _get_workflows(group) -> list:
     try:
@@ -71,16 +76,18 @@ def _get_workflows(group) -> list:
 
     return workflows
 
+
 def _read_workflow(workflow_path, workflow_name) -> dict:
-    with open(f'{workflow_path}/{workflow_name}','r') as f:
+    with open(f'{workflow_path}/{workflow_name}', 'r') as f:
         body = f.read()
 
     path = f'.github/workflows/{workflow_name}'
 
-    workflow_meta = {}    
+    workflow_meta = {}
     workflow_meta[path] = body
 
     return workflow_meta
+
 
 def _filter_match_repository_topics_to_group(group, repositories) -> list:
     '''
@@ -97,6 +104,7 @@ def _filter_match_repository_topics_to_group(group, repositories) -> list:
         sys.exit(1)
 
     return result
+
 
 def _get_group(repo) -> str:
     '''
@@ -118,6 +126,7 @@ def _get_group(repo) -> str:
 
     logging.error('There are no matching topics in the workflow group!')
     sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
