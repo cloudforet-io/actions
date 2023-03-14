@@ -60,16 +60,16 @@ class GithubConnector:
             logging.warning(e)
 
     def _create_new_file_in_repository(self, repo, workflows) -> None:
-        try:
-            for workflow in workflows:
-                for path, content in workflow.items():
+        for workflow in workflows:
+            for path, content in workflow.items():
+                try:
                     ret = repo.create_file(path=path, message="[CI] Deploy CI", content=content, branch="master",
                                            committer=self._committer)
                     logging.info(f'file has been created to {repo.full_name} : {ret}')
-        except GithubException as e:
-            logging.error(f'failed to file creation : {e}')
-        except Exception as e:
-            raise e
+                except GithubException as e:
+                    logging.error(f'failed to file creation({path}) : {e}')
+                except Exception as e:
+                    raise e
 
     def _update_file_in_repository(self, repo, workflows) -> None:
         try:
@@ -80,7 +80,8 @@ class GithubConnector:
                         ret = repo.update_file(path=contents.path, message="[CI] Update CI", content=content,
                                                sha=contents.sha, branch="master", committer=self._committer)
                         logging.info(f'file has been updated in {repo.full_name} : {ret}')
-                logging.info(f'Nothing to do, There are no change in {repo.full_name}')
+                    else: 
+                        logging.info(f'Nothing to do, There are no change in {path}')
         except UnknownObjectException as e:
             logging.warning(f'failed to update to {repo.full_name}: {e}')
             logging.warning("The file may not exist, try to create a file.")
