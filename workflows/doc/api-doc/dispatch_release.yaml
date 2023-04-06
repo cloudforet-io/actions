@@ -11,6 +11,8 @@ on:
         description: 'version을 입력해주세요(x.y.z)'
         required: true
         default: '1.0.0'
+  repository_dispatch:
+    types: [api_release]
 
 env:
   BRANCH: ${{ github.event.inputs.branch }}
@@ -22,25 +24,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        run: echo "please implement here"
+        run: |
+          echo "Gnereate Markdown"
+          echo "Hugo build {trigger hugo actions}"
 
-      - name: Notice when job fails
-        if: failure()
-        uses: 8398a7/action-slack@v3.15.0
-        with:
-          status: ${{job.status}}
-          fields: repo,workflow,job
-          author_name: Github Action Slack
+        # uses: peter-evans/repository-dispatch@v1
+        # with:
+        #   token: ${{ secrets.PAT_TOKEN }}
+        #   repository: ${{ github.event.inputs.repository }}
+        #   event-type: master_push
 
-  tagging:
-    needs: build_and_push
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.BRANCH }}
-          
       - name: Push artifacts and tag to origin master
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -51,7 +44,7 @@ jobs:
           commit_author: cloudforet-admin <admin@cloudforet.io>
           push_options: '--force'
           tagging_message: ${{ env.VERSION }}
-          
+
       - name: Notice when job fails
         if: failure()
         uses: 8398a7/action-slack@v3.15.0
