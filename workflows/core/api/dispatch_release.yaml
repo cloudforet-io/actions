@@ -50,29 +50,9 @@ jobs:
           user: ${{ secrets.PYPI_USERNAME }}
           password: ${{ secrets.PYPI_API_TOKEN }}
           verbose: true
-          packages-dir: dist/
+          packages-dir: dist/python/
 
-      - name: Push json to api-doc repository
-        run: echo "please, implement here"
-
-      - name: Notice when job fails
-        if: failure()
-        uses: 8398a7/action-slack@v3.15.0
-        with:
-          status: ${{job.status}}
-          fields: repo,workflow,job
-          author_name: Github Action Slack
-
-  tagging:
-    needs: build_and_push
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.BRANCH }}
-          
-      - name: Push artifacts and tag to origin master
+      - name: Push artifacts to origin master
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: master
@@ -82,7 +62,17 @@ jobs:
           commit_author: cloudforet-admin <admin@cloudforet.io>
           push_options: '--force'
           tagging_message: ${{ env.VERSION }}
-          
+
+      - name: Push json to api-doc repository
+        run: echo "implement push to api-doc"
+
+      - name: Trigger release dispatch in api-doc
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          event-type: api_release
+          client-payload: '{"version": "${{ env.VERSION }}", "branch": "${{ env.BRANCH }}"}'
+
       - name: Notice when job fails
         if: failure()
         uses: 8398a7/action-slack@v3.15.0
