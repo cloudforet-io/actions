@@ -56,7 +56,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: master
-          commit_message: "[CI] API artifacts have been built"
+          commit_message: "[CI] api has been built"
           commit_user_name: cloudforet-admin
           commit_user_email: admin@cloudforet.io
           commit_author: cloudforet-admin <admin@cloudforet.io>
@@ -64,14 +64,13 @@ jobs:
           tagging_message: ${{ env.VERSION }}
 
       - name: Push json to api-doc repository
-        run: echo "implement push to api-doc"
-
-      - name: Trigger release dispatch in api-doc
-        uses: peter-evans/repository-dispatch@v1
+        uses: andstor/copycat-action@v3
         with:
-          token: ${{ secrets.PAT_TOKEN }}
-          event-type: api_release
-          client-payload: '{"version": "${{ env.VERSION }}", "branch": "${{ env.BRANCH }}"}'
+          personal_token: ${{ secrets.PAT_TOKEN }}
+          src_path: '???'
+          dst_path: '???'
+          dst_owner: cloudforet-io
+          dst_repo_name: api-doc
 
       - name: Notice when job fails
         if: failure()

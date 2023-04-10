@@ -43,7 +43,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: spaceone/${{ github.event.repository.name }}:${{ env.VERSION }}
+          tags: cloudforet/${{ github.event.repository.name }}:${{ env.VERSION }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -107,7 +107,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: master
-          commit_message: "[CI] API artifacts have been built"
+          commit_message: "[CI] marketplace-assets has been built"
           commit_user_name: cloudforet-admin
           commit_user_email: admin@cloudforet.io
           commit_author: cloudforet-admin <admin@cloudforet.io>
