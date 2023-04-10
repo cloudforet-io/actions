@@ -59,8 +59,10 @@ jobs:
             author_name: Github Action Slack
             
   scan:
-    needs: docker
+    needs: [versioning, docker]
     runs-on: ubuntu-20.04
+    env:
+      VERSION: ${{ needs.versioning.outputs.version }}
     steps:
       - name: Run Trivy vulnerability scanner
         id: trivy-scan
