@@ -49,9 +49,9 @@ jobs:
             TURBO_TEAM=${{ secrets.TURBO_TEAM }}
           push: true
           tags: |
-            pyengine/${{ github.event.repository.name }}:latest
-            pyengine/${{ github.event.repository.name }}:${{ env.VERSION }}
-          cache-from: pyengine/${{ env.SERVICE }}:latest
+            cloudforetdev/${{ github.event.repository.name }}:latest
+            cloudforetdev/${{ github.event.repository.name }}:${{ env.VERSION }}
+          cache-from: cloudforetdev/${{ env.SERVICE }}:latest
           cache-to: type=inline
 
       - name: Notice when job fails
@@ -70,7 +70,7 @@ jobs:
         id: trivy-scan
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: pyengine/${{ github.event.repository.name }}:${{ env.VERSION }}
+          image-ref: cloudforetdev/${{ github.event.repository.name }}:${{ env.VERSION }}
           format: 'sarif'
           output: 'trivy-results.sarif'
           ignore-unfixed: true
@@ -110,7 +110,7 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Image:*\n$pyengine/${{ github.event.repository.name }}:${{ env.VERSION }}"
+                      "text": "*Image:*\n$cloudforetdev/${{ github.event.repository.name }}:${{ env.VERSION }}"
                     },
                     {
                       "type": "mrkdwn",
