@@ -104,7 +104,7 @@ jobs:
         uses: docker/build-push-action@v1
         with:
           path: .
-          repository: pyengine/${{ env.SERVICE }}
+          repository: cloudforetdev/${{ env.SERVICE }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: ${{ env.VERSION }}
@@ -112,7 +112,7 @@ jobs:
         uses: docker/build-push-action@v1
         with:
           path: .
-          repository: spaceone/${{ env.SERVICE }}
+          repository: cloudforet/${{ env.SERVICE }}
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           tags: ${{ env.VERSION }}

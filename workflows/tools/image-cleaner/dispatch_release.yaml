@@ -78,7 +78,7 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: master
-          commit_message: "[CI] API artifacts have been built"
+          commit_message: "[CI] image-cleaner has been built"
           commit_user_name: cloudforet-admin
           commit_user_email: admin@cloudforet.io
           commit_author: cloudforet-admin <admin@cloudforet.io>
