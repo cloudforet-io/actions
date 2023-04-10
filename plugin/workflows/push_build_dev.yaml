@@ -108,7 +108,7 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Image:*\n$pyengine/${{ github.event.repository.name }}:${{ env.VERSION }}"
+                      "text": "*Image:*\npyengine/${{ github.event.repository.name }}:${{ env.VERSION }}"
                     },
                     {
                       "type": "mrkdwn",
