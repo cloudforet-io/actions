@@ -1,5 +1,9 @@
+import logging
+
 from connector.github_connector import GithubConnector
 from err.github_err import *
+
+logging.basicConfig(level=logging.INFO)
 
 
 class GithubManager:
@@ -16,27 +20,27 @@ class GithubManager:
         return self.github_conn.get_topics(destination)
 
     def get_file_contents(self, destination, path):
-        try:
-            file_vo = self.github_conn.get_file(destination, path)
+        file_vo = self.github_conn.get_file(destination, path)
+        if file_vo is None:
+            return None
 
-            return file_vo.decoded_content.decode('utf-8')
-        except GithubException:
-            raise None
+        return file_vo.decoded_content.decode('utf-8')
 
     def commit(self, destination, workflows):
         for path, content in workflows.items():
             try:
                 if self.get_file_contents(destination, path):
-                    print(f'file {path} already exists, try to update')
+                    logging.info(f'file {path} already exists, try to update')
                     file_vo = self.github_conn.get_file(destination, path)
                     if self._is_need_update(file_vo, content):
                         self.github_conn.update_file(destination, path, content)
                     else:
-                        print(f'There is no change, file is not updated: {path}')
+                        logging.info(f'There is no change, file is not updated: {path}')
                 else:
+                    logging.info(f'Try to create {path} to {destination}')
                     self.github_conn.create_file(destination, path, content)
             except GithubException as e:
-                print(e)
+                logging.exception(e)
 
     @staticmethod
     def _is_need_update(file_vo, workflow):
