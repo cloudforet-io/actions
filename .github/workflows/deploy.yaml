@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: set git user
-        run : git config --global user.email cloudforet-cicd@megazone.com
+        run : git config --global user.email admin@cloudforet.io
       - name: set python
         uses: actions/setup-python@v2
         with:
@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: set git user
-        run : git config --global user.email cloudforet-cicd@megazone.com
+        run : git config --global user.email admin@cloudforet.io
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v1
         with:
