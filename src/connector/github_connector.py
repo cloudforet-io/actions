@@ -1,8 +1,11 @@
 import os
 import github
+import logging
 
 from github import Github
 from err.github_err import *
+
+logging.basicConfig(level=logging.INFO)
 
 
 class GithubConnector:
@@ -14,7 +17,7 @@ class GithubConnector:
     def list_repo(self, org):
         repositories = []
         for repo in self.github_client.get_organization(org).get_repos():
-            repositories.append(repo.name)
+            repositories.append(repo)
 
         return repositories
 
@@ -30,27 +33,33 @@ class GithubConnector:
 
         try:
             return repo_vo.get_contents(path=path, ref="master")
-        except github.GithubException as e:
-            if e.status == 404:
-                return e
-            else:
-                raise GithubException(e)
+        except GithubException as e:
+            return None
+        except Exception as e:
+            raise Exception(e)
 
     def create_file(self, destination, path, content):
         repo_vo = self.get_repo(destination)
-
         try:
             repo_vo.create_file(path=path, message="[CI] Deploy CI", content=content, branch="master",
                                 committer=self.committer)
+            return 200
+        except GithubException as e:
+            logging.exception(f'Failed to file creation: {e}')
+            raise Exception(e)
         except Exception as e:
-            raise GithubException(e)
+            raise Exception(e)
 
     def update_file(self, destination, path, content):
         repo_vo = self.get_repo(destination)
         file_vo = self.get_file(destination, path)
 
         try:
-            repo_vo.update_file(path=path, message="[CI] Deploy CI", content=content, sha=file_vo.sha, branch="master",
+            repo_vo.update_file(path=path, message="[CI] Deploy CI", content=content, sha=file_vo.sha,
+                                branch="master",
                                 committer=self.committer)
-        except Exception as e:
+            return 200
+        except GithubException as e:
             raise GithubException(e)
+        except Exception as e:
+            raise Exception(e)
