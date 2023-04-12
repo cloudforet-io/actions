@@ -7,22 +7,24 @@ def parse_args():
         description='File push to github repository',
         epilog=textwrap.dedent('''\
             Examples:
-                python src/%(prog)s --repo cloudforet-io/inventory
-                python src/%(prog)s --repo cloudforet-io/config --init
-                python src/%(prog)s --group plugin
-                python src/%(prog)s --group plugin --init
+                python src/%(prog)s --org cloudforet-io --dest inventory --type repository
+                python src/%(prog)s --dest inventory --type repository
+                python src/%(prog)s --dest config --type repository --init
+                python src/%(prog)s --dest core/python-service --type topic
+                python src/%(prog)s --dest core/console --type topic --init
         '''),
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
-    group = parser.add_mutually_exclusive_group(required=True)
+    parser.add_argument('--org', metavar='"organization"', default='cloudforet-io',
+                        required=True, help='organization of github repository (Default=cloudforet-io)')
 
-    group.add_argument('--repo', metavar='<owner/repo>',
-                       help='Select specified repository.')
+    parser.add_argument('--dest', metavar='"destination"',
+                        required=True, help='destination of workflows')
 
-    group.add_argument('--group', metavar='<group_name>',
-                       help='Select specified group.')
+    parser.add_argument('--type', metavar='"repository|topic"', choices=['repository, topic'],
+                        required=True, help='type of destination')
 
     parser.add_argument('--init', action='store_true', default=False,
-                        help='Deploy sync workflow only.')
+                        help='init deployment flag (Default=false)')
 
     return parser.parse_args()
