@@ -13,7 +13,7 @@ class ActionsService:
         if type == 'repository':
             destinations.append(dest)
         elif type == 'topic':
-            destinations = self._convert_topic_to_repository_name(org, dest)
+            destinations = self._find_destinations_with_topics(org, dest)
 
         for destination in destinations:
             if type == 'topic':
@@ -32,7 +32,7 @@ class ActionsService:
             for workflow in workflows:
                 self.github_mgr.commit(destination, workflow)
 
-    def _convert_topic_to_repository_name(self, org, destination):
+    def _find_destinations_with_topics(self, org, destination):
 
         repositories = self.github_mgr.list_repo(org)
 
