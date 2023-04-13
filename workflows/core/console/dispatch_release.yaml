@@ -103,17 +103,13 @@ jobs:
         with:
           ref: ${{ env.BRANCH }}
 
-      - name: Push artifacts and tag to origin master
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          branch: master
-          commit_message: "[CI] console has been built"
-          commit_user_name: cloudforet-admin
-          commit_user_email: admin@cloudforet.io
-          commit_author: cloudforet-admin <admin@cloudforet.io>
-          push_options: '--force'
-          tagging_message: ${{ env.VERSION }}
-          
+      - name: tagging
+        run: |
+          git config user.email admin@cloudforet.io
+          git config user.name cloudforet-admin
+          git tag ${{ env.VERSION }}
+          git push origin ${{ env.VERSION }}
+
       - name: Notice when job fails
         if: failure()
         uses: 8398a7/action-slack@v3.15.0
