@@ -1,11 +1,16 @@
-name: "[CI] init repository"
+name: "[CI] init workflows"
 
 on:
   workflow_dispatch:
     inputs:
-      repo:
-        description: 'target repository'
+      dest:
+        description: 'target repository({repository_name} or {topic1/topic2})'
         required: true
+        default: 'identity'
+      type:
+        description: 'type of deployment ({repository} or {topic})'
+        required: true
+        default: 'repository'
 
 jobs:
   deploy:
@@ -14,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: set git user
-        run : git config --global user.email cloudforet-cicd@megazone.com
+        run : git config --global user.email admin@cloudforet.io
       - name: set python
         uses: actions/setup-python@v2
         with:
@@ -23,6 +28,6 @@ jobs:
         run: pip install -r requirements.txt
       - name: set PAT_TOKEN env
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
-      - name: init deploy
+      - name: init workflows
         run: |
-          python src/main.py --repo ${{ github.event.inputs.repo }} --init
+          python src/main.py --repo ${{ github.event.inputs.dest }} --type ${{ github.event.inputs.type }}
