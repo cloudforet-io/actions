@@ -3,9 +3,10 @@ name: SpaceONE Github Action Deploy
 on:
   workflow_dispatch:
     inputs:
-      repository:
-        description: 'target repository'
+      dest:
+        description: 'target repository({repository_name} or {topic1/topic2})'
         required: true
+        default: 'identity'
       sync_only:
         description: 'sync only flag'
         required: false
@@ -27,7 +28,7 @@ jobs:
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
       - name: deploy
         run: |
-          python src/main.py --repo ${{ github.event.inputs.repository }}
+          python src/main.py --dest ${{ github.event.inputs.dest }} --type repository
 
   master_push:
     runs-on: ubuntu-latest
