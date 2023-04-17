@@ -10,8 +10,6 @@ def main():
     type = ARGS.type
     org = ARGS.org
     dest = ARGS.dest
-    if ARGS.type == 'repository':
-        dest = org + '/' + dest
 
     actions_srv.deploy(org=org, dest=dest, type=type)
 
