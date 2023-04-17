@@ -62,6 +62,7 @@ jobs:
         with:
           context: .
           file: ./apps/web/Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: cloudforet/${{ github.event.repository.name }}:${{ env.VERSION }}
 
@@ -80,6 +81,7 @@ jobs:
         with:
           context: .
           file: ./apps/web/Dockerfile
+          platforms: linux/amd64,linux/arm64
           push: true
           cache-from: cloudforetdev/${{ github.event.repository.name }}:latest
           tags: |

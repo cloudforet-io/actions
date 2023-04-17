@@ -1,0 +1,11 @@
+name: "[dispatch] sync ci all"
+on:
+  workflow_dispatch:
+
+jobs:
+  dispatch_sync_ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        run: |
+          python src/main.py --dest all --type repository
