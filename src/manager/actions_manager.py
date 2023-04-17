@@ -1,3 +1,5 @@
+import sys
+
 from manager.github_manager import GithubManager
 from manager.workflow_manager import WorkflowManager
 
@@ -9,7 +11,7 @@ class ActionsManager:
 
     def get_destinations(self, org, dest, type):
         if type == 'repository':
-            return [dest]
+            return [f'{org}/{dest}']
         elif type == 'topic':
             return self.find_destinations_with_topics(org, dest)
 
@@ -53,6 +55,26 @@ class ActionsManager:
 
         return results
 
+    def find_all_destinations(self, org):
+        workflow_topics = self.workflow_mgr.list_workflow_directory_name()
+
+        # Generate a topic set to search for all repositories using the GitHub Search API
+        # example) core/python-service -> topic:core topic:python-service org:github
+        # https://docs.github.com/en/rest/reference/search#search-repositories
+        topics = []
+        for topic in workflow_topics.keys():
+            for sub_topic in workflow_topics[topic]:
+                topics.append(f'{topic}/{sub_topic}')
+
+        destinations = []
+        for topic in topics:
+            keyword = self._make_keyword(topic, org)
+            repositories = self.github_mgr.search_repo(org, keyword)
+            for repository in repositories:
+                destinations.append(repository.full_name)
+
+        return destinations
+
     @staticmethod
     def get_topic_with_dest(github_topics, workflow_topics):
         topic_1 = ''
@@ -67,3 +89,11 @@ class ActionsManager:
                 topic_2 = topic
 
         return f'{topic_1}/{topic_2}'
+
+    @staticmethod
+    def _make_keyword(topics, org):
+        # example: "org:<org_name> AND (topic:<topic1> AND topic:<topic2>) OR (topic:<topic3> AND topic:<topic4>)"
+        topics = topics.split('/')
+        keyword = f'org:{org} topic:{topics[0]} topic:{topics[1]}'
+
+        return keyword
