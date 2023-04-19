@@ -11,8 +11,6 @@ on:
         description: 'version을 입력해주세요(x.y.z)'
         required: true
         default: '1.0.0'
-  repository_dispatch:
-    types: [api_release]
 
 env:
   BRANCH: ${{ github.event.inputs.branch }}
@@ -99,7 +97,7 @@ jobs:
           author_name: Github Action Slack
 
   notification:
-    needs: docker
+    needs: tagging
     runs-on: ubuntu-latest
     steps:
       - name: Slack

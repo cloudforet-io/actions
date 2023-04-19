@@ -21,8 +21,29 @@ class GithubConnector:
 
         return repositories
 
+    def search_repo(self, org, keyword):
+        repositories = []
+        for repo in self.github_client.search_repositories(query=f'org:{org} {keyword}'):
+            repositories.append(repo)
+
+        return repositories
+
     def get_repo(self, destination):
-        return self.github_client.get_repo(destination)
+        try:
+            return self.github_client.get_repo(destination)
+        except UnknownObjectException as e:
+            if "Branch not found" in str(e):
+                logging.error("UnknownObjectException: Branch not found")
+            elif "Release not found" in str(e):
+                logging.error("UnknownObjectException: Release not found")
+            else:
+                logging.error(f"UnknownObjectException: {e}")
+            raise Exception(e)
+        except BadCredentialsException as e:
+            logging.error(f'BadCredentialsException: {destination}')
+            raise Exception(e)
+        except Exception as e:
+            raise Exception(e)
 
     def get_topics(self, destination):
         repo_vo = self.get_repo(destination)
@@ -33,7 +54,7 @@ class GithubConnector:
 
         try:
             return repo_vo.get_contents(path=path, ref="master")
-        except GithubException as e:
+        except GithubException:
             return None
         except Exception as e:
             raise Exception(e)
@@ -45,7 +66,6 @@ class GithubConnector:
                                 committer=self.committer)
             return 200
         except GithubException as e:
-            logging.exception(f'Failed to file creation: {e}')
             raise Exception(e)
         except Exception as e:
             raise Exception(e)
