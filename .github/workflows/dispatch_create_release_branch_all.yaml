@@ -12,7 +12,32 @@ env:
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
 
 jobs:
+  core_python_core:
+    if: github.repository_owner == 'cloudforet-io'
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repo: cloudforet-io/console
+          workflow: dispatch_create_release_branch_all.yaml
+          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
+
+  core_api:
+    needs: core_python_core
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repo: cloudforet-io/console
+          workflow: dispatch_create_release_branch_all.yaml
+          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
+
   core_console:
+    needs: core_api
     runs-on: ubuntu-latest
     steps:
       - name: task
@@ -88,7 +113,6 @@ jobs:
           inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
 
   notify_to_slack:
-    if: github.repository_owner == 'cloudforet-io'
     needs: [doc]
     runs-on: ubuntu-latest
     steps:
