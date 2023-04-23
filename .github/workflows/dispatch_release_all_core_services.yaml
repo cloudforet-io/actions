@@ -10,6 +10,9 @@ on:
         description: 'version을 입력해주세요(x.y.z)'
         required: true
         default: '1.0.0'
+      beginning:
+        description: 'release의 첫 시작인 경우 true를 넣어주세요'
+        required: false
 
 env:
   BRANCH: ${{ github.event.inputs.branch }}
@@ -51,13 +54,23 @@ jobs:
     runs-on: ubuntu-latest
     continue-on-error: true
     steps:
-      - name: task
+      - name: task if not beginning
+        if: ${{ !github.event.inputs.beginning }}
         uses: benc-uk/workflow-dispatch@v1
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
           workflow: dispatch_release.yaml
           inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
+
+      - name: task if beginning
+        if: ${{ github.event.inputs.beginning }}
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          repo: cloudforet-io/${{ matrix.target }}
+          workflow: dispatch_release.yaml
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "beginning": "true"}'
 
   tools:
     strategy:
