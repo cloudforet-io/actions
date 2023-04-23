@@ -1,18 +1,23 @@
-name: "[dispatch] create release branch all"
+name: "[dispatch] daily build all core services"
 on:
   workflow_dispatch:
     inputs:
-      branch_name:
-        description: branch name (release-x.y.z)
+      branch:
+        description: 'branch를 입력해주세요(master와 release-x.y.z만 허용)'
         required: true
-        default: 'release-1.0.0'
+        default: 'master'
+      version:
+        description: 'version을 입력해주세요(x.y.z)'
+        required: true
+        default: '1.0.0'
 
 env:
-  BRANCH_NAME: ${{ github.event.inputs.branch_name }}
+  BRANCH: ${{ github.event.inputs.branch }}
+  VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
 
 jobs:
-  core_python_core:
+  core_console:
     if: github.repository_owner == 'cloudforet-io'
     runs-on: ubuntu-latest
     steps:
@@ -21,32 +26,8 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/console
-          workflow: dispatch_create_release_branch_all.yaml
-          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
-
-  core_api:
-    needs: core_python_core
-    runs-on: ubuntu-latest
-    steps:
-      - name: task
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
-          repo: cloudforet-io/console
-          workflow: dispatch_create_release_branch_all.yaml
-          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
-
-  core_console:
-    needs: core_api
-    runs-on: ubuntu-latest
-    steps:
-      - name: task
-        uses: benc-uk/workflow-dispatch@v1
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
-          repo: cloudforet-io/console
-          workflow: dispatch_create_release_branch_all.yaml
-          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
+          workflow: dispatch_daily_build.yaml
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
 
   core_console_api:
     needs: core_console
@@ -57,8 +38,8 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/console-api
-          workflow: dispatch_create_release_branch_all.yaml
-          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
+          workflow: dispatch_daily_build.yaml
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
 
   core_python_service:
     strategy:
@@ -75,8 +56,8 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
-          workflow: dispatch_create_release_branch_all.yaml
-          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
+          workflow: dispatch_daily_build.yaml
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
 
   tools:
     strategy:
@@ -92,8 +73,8 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
-          workflow: dispatch_create_release_branch_all.yaml
-          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
+          workflow: dispatch_daily_build.yaml
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
 
   doc:
     strategy:
@@ -109,8 +90,8 @@ jobs:
         with:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
-          workflow: dispatch_create_release_branch_all.yaml
-          inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
+          workflow: dispatch_daily_build.yaml
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
 
   notify_to_slack:
     needs: [doc]
