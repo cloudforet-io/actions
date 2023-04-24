@@ -16,17 +16,12 @@ class ActionsManager:
             return self.find_destinations_with_topics(org, dest)
 
     def get_workflows(self, dest):
-        is_need_common = True
-
         github_topics = self.github_mgr.get_topics(dest)
         workflow_topics = self.workflow_mgr.list_workflow_directory_name()
         topic = self.get_topic_with_dest(github_topics, workflow_topics)
         workflows = self.workflow_mgr.list_workflows_data(topic)
 
-        if topic == 'plugin':
-            is_need_common = False
-
-        if is_need_common:
+        if 'plugin' not in topic.split('/'):
             workflows += self.workflow_mgr.list_workflows_data('common')
 
         return workflows
