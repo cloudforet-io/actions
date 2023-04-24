@@ -20,7 +20,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          repo: cloudforet-io/console
+          repo: cloudforet-io/python-core
           workflow: dispatch_create_release_branch_all.yaml
           inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
 
@@ -32,7 +32,7 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          repo: cloudforet-io/console
+          repo: cloudforet-io/api
           workflow: dispatch_create_release_branch_all.yaml
           inputs: '{"branch": "${{ env.BRANCH_NAME }}"}'
 
