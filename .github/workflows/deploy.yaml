@@ -42,5 +42,5 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          repository: ${{ github.event.inputs.repository }}
+          repository: ${{ github.repository_owner }}/${{ github.event.inputs.dest }}
           event-type: master_push

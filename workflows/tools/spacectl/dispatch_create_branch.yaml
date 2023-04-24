@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       branch_name:
-        description: branch name (release-x.y.z)
+        description: branch name (release-x.y)
         required: true
-        default: 'release-1.0.0'
+        default: 'release-1.0'
 
 jobs:
   create_branch:

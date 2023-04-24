@@ -30,4 +30,4 @@ jobs:
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
       - name: init workflows
         run: |
-          python src/main.py --repo ${{ github.event.inputs.dest }} --type ${{ github.event.inputs.type }}
+          python src/main.py --dest ${{ github.event.inputs.dest }} --type ${{ github.event.inputs.type }}
