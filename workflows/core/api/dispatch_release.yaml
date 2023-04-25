@@ -67,8 +67,8 @@ jobs:
         uses: andstor/copycat-action@v3
         with:
           personal_token: ${{ secrets.PAT_TOKEN }}
-          src_path: '???'
-          dst_path: '???'
+          src_path: dist/json/.
+          dst_path: dist/json/.
           dst_owner: cloudforet-io
           dst_repo_name: api-doc
 
