@@ -29,10 +29,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.BRANCH }}
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Set version only major and minor
+        run: |
+          echo "XY_VERSION=$(echo ${{ env.VERSION }} | cut -d'.' -f1-2)" >> $GITHUB_ENV
 
       - name: Update base image version in Dockerfile
         run: |
-          sed -i 's/FROM cloudforet\/python-core:.*/FROM cloudforet\/python-core:${{ env.VERSION }}/' Dockerfile
+          sed -i 's/FROM cloudforet\/python-core:.*/FROM cloudforet\/python-core:${{ env.XY_VERSION }}/' Dockerfile
 
       - name: Push artifacts to origin master
         uses: stefanzweifel/git-auto-commit-action@v4
@@ -51,6 +56,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.BRANCH }}
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: tagging
         run: |
@@ -116,6 +122,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ env.BRANCH }}
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -129,10 +136,14 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Set version only major and minor
+        run: |
+          echo "XY_VERSION=$(echo ${{ env.VERSION }} | cut -d'.' -f1-2)" >> $GITHUB_ENV
+
       - name: Update base image version in Dockerfile
         if: ${{ github.event.inputs.beginning }}
         run: |
-          sed -i 's/FROM cloudforet\/python-core:.*/FROM cloudforet\/python-core:${{ env.VERSION }}/' Dockerfile
+          sed -i 's/FROM cloudforet\/python-core:.*/FROM cloudforet\/python-core:${{ env.XY_VERSION }}/' Dockerfile
 
       - name: Build and push to dockerhub
         uses: docker/build-push-action@v4
