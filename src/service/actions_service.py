@@ -1,5 +1,4 @@
 import concurrent.futures
-import sys
 
 from manager.github_manager import GithubManager
 from manager.workflow_manager import WorkflowManager
@@ -16,19 +15,22 @@ class ActionsService:
         if dest == 'all':
             self.deploy_all(org)
         else:
-            destinations = self.actions_mgr.get_destinations(org, dest, type)
+            destinations = self.actions_mgr.list_destinations(org, dest, type)
 
             for destination in destinations:
-                workflows = self.actions_mgr.get_workflows(destination)
+                workflows = self.actions_mgr.list_workflows(destination)
 
                 for workflow in workflows:
                     self.github_mgr.commit(destination, workflow)
 
     def deploy_all(self, org):
+        # TODO: Support single topic
+        # Currently, only double topics are supported.
+        # see workflow_mgr -> list_workflow_directory_name()
         destinations = self.actions_mgr.find_all_destinations(org)
 
         for destination in destinations:
-            workflows = self.actions_mgr.get_workflows(destination)
+            workflows = self.actions_mgr.list_workflows(destination)
 
             with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
                 for workflow in workflows:

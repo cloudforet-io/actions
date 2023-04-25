@@ -1,5 +1,3 @@
-import sys
-
 from manager.github_manager import GithubManager
 from manager.workflow_manager import WorkflowManager
 
@@ -9,13 +7,13 @@ class ActionsManager:
         self.github_mgr = GithubManager()
         self.workflow_mgr = WorkflowManager()
 
-    def get_destinations(self, org, dest, type):
+    def list_destinations(self, org, dest, type):
         if type == 'repository':
             return [f'{org}/{dest}']
         elif type == 'topic':
             return self.find_destinations_with_topics(org, dest)
 
-    def get_workflows(self, dest):
+    def list_workflows(self, dest):
         github_topics = self.github_mgr.get_topics(dest)
         workflow_topics = self.workflow_mgr.list_workflow_directory_name()
         topic = self.get_topic_with_dest(github_topics, workflow_topics)
@@ -31,6 +29,7 @@ class ActionsManager:
         topics = dest.split("/")
 
         results = []
+        # has topic 1 and topic 2 / double topic
         if len(topics) == 2:
             topic1 = topics[0]
             topic2 = topics[1]
@@ -40,6 +39,7 @@ class ActionsManager:
                 if topic1 in topics and topic2 in topics:
                     results.append(repository.full_name)
 
+        # has topic 1 / single topic
         elif len(topics) == 1:
             topic = topics[0]
 

@@ -34,16 +34,26 @@ class GithubManager:
 
     def commit(self, destination, workflow):
         for path, content in workflow.items():
+
             if self.get_file_contents(destination, path):
                 logging.info(f'[{destination}] file {path} already exists, try to update')
+
                 file_vo = self.github_conn.get_file(destination, path)
-                if self._is_need_update(file_vo, content):
-                    self.github_conn.update_file(destination, path, content)
-                else:
+                if not self._is_need_update(file_vo, content):
                     logging.info(f'[{destination}] There is no change, file is not updated: {path}')
+                    continue
+
+                try:
+                    self.github_conn.update_file(destination, path, content)
+                except Exception as e:
+                    logging.error(f'[{destination}] Failed to update {path} to {destination} : {e}')
+
             else:
-                logging.info(f'[{destination}] Try to create {path} to {destination}')
-                self.github_conn.create_file(destination, path, content)
+                try:
+                    logging.info(f'[{destination}] Try to create {path} to {destination}')
+                    self.github_conn.create_file(destination, path, content)
+                except Exception as e:
+                    logging.error(f'[{destination}] Failed to create {path} to {destination} : {e}')
 
     @staticmethod
     def _is_need_update(file_vo, workflow):
