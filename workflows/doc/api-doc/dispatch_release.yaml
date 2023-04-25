@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'branch를 입력해주세요(master와 release-x.y.z만 허용)'
+        description: 'enter branch (only master and release-x.y.z are allowed)'
         required: true
         default: 'master'
       version:
-        description: 'version을 입력해주세요(x.y.z)'
+        description: 'enter version(x.y.z)'
         required: true
         default: '1.0.0'
   repository_dispatch:
