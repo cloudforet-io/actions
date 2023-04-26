@@ -1,9 +1,14 @@
 name: "[Push] Build dev"
 
 on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '.github/**'
+      - 'src/VERSION'
+      - 'docs/**'
   workflow_dispatch:
-  repository_dispatch:
-    types: [master_push]
 
 env:
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}

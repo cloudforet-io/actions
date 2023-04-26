@@ -19,9 +19,6 @@ class ActionsManager:
         topic = self.get_topic_with_dest(github_topics, workflow_topics)
         workflows = self.workflow_mgr.list_workflows_data(topic)
 
-        if 'plugin' not in topic.split('/'):
-            workflows += self.workflow_mgr.list_workflows_data('common')
-
         return workflows
 
     def find_destinations_with_topics(self, org, dest):

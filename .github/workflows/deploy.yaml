@@ -1,4 +1,4 @@
-name: SpaceONE Github Action Deploy
+name: Cloudforet Github Action Deploy
 
 on:
   workflow_dispatch:
@@ -7,9 +7,6 @@ on:
         description: 'target repository({repository_name} or {topic1/topic2})'
         required: true
         default: 'identity'
-      sync_only:
-        description: 'sync only flag'
-        required: false
 
 jobs:
   deploy:
@@ -29,18 +26,3 @@ jobs:
       - name: deploy
         run: |
           python src/main.py --dest ${{ github.event.inputs.dest }} --type repository
-
-  master_push:
-    runs-on: ubuntu-latest
-    if: ${{ !github.event.inputs.sync_only }}
-    needs: deploy
-    steps:
-      - uses: actions/checkout@v2
-      - name: set git user
-        run : git config --global user.email admin@cloudforet.io
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
-          repository: ${{ github.repository_owner }}/${{ github.event.inputs.dest }}
-          event-type: master_push
