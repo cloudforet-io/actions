@@ -1,4 +1,4 @@
-name: "[Dispatch] Release"
+ame: "[Dispatch] Release"
 
 on:
   workflow_dispatch:
@@ -31,7 +31,7 @@ jobs:
       - name: Set python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8' 
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |
@@ -51,7 +51,8 @@ jobs:
           user: ${{ secrets.PYPI_USERNAME }}
           password: ${{ secrets.PYPI_PASSWORD }}
           verbose: true
-          packages-dir: dist/python/
+          packages-dir: dist/python/dist/
+
 
 #      - name: Push artifacts to origin master
 #        uses: stefanzweifel/git-auto-commit-action@v4
