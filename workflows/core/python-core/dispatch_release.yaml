@@ -20,6 +20,7 @@ on:
 env:
   BRANCH: ${{ github.event.inputs.branch }}
   VERSION: ${{ github.event.inputs.version }}
+  PACKAGE_VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
 
 jobs:
@@ -60,7 +61,7 @@ jobs:
       - name: Set python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8' 
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |
@@ -78,7 +79,7 @@ jobs:
           user: ${{ secrets.PYPI_USERNAME }}
           password: ${{ secrets.PYPI_PASSWORD }}
           verbose: true
-          packages-dir: dist/
+          packages-dir: src/dist/
 
       - name: Notice when job fails
         if: failure()
@@ -127,28 +128,6 @@ jobs:
             cloudforet/${{ github.event.repository.name }}:${{ env.X_VERSION }}
             cloudforet/${{ github.event.repository.name }}:${{ env.XY_VERSION }}
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
-      - name: Login to Amazon ECR
-        run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_REPO }}
-
-      - name: Build and push to ECR
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
-          no-cache: ${{ github.event.inputs.no-cache }}
-          tags: |
-            ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:${{ env.VERSION }}
-            ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:${{ env.X_VERSION }}
-            ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:${{ env.XY_VERSION }}
-
       - name: Notice when job fails
         if: failure()
         uses: 8398a7/action-slack@v3.15.0
@@ -158,7 +137,7 @@ jobs:
           author_name: Github Action Slack
 
   notification:
-    needs: tagging
+    needs: docker
     runs-on: ubuntu-latest
     steps:
       - name: Slack
