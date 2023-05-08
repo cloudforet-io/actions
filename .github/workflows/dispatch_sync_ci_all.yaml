@@ -3,9 +3,68 @@ on:
   workflow_dispatch:
 
 jobs:
-  dispatch_sync_ci:
+  core_python_core:
+    if: github.repository_owner == 'cloudforet-io'
     runs-on: ubuntu-latest
     steps:
       - name: task
         run: |
-          python src/main.py --dest all --type repository
+          python src/main.py --dest core/python-core --type topic
+
+  core_api:
+    needs: core_python_core
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        run: |
+          python src/main.py --dest core/api --type topic
+
+  core_console:
+    needs: core_api
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        run: |
+          python src/main.py --dest core/console --type topic
+
+  core_console_api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        run: |
+          python src/main.py --dest core/console-api --type topic
+
+  core_python_service:
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        run: |
+          python src/main.py --dest core/python-service --type topic
+
+  tools:
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        run: |
+          python src/main.py --dest tools/spacectl --type topic
+
+  doc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: task
+        run: |
+          python src/main.py --dest doc/api-doc --type topic
+          python src/main.py --dest doc/docs --type topic
+          python src/main.py --dest doc/marketplace-assets --type topic
+
+  notify_to_slack:
+    needs: doc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack
+        if: always()
+        uses: 8398a7/action-slack@v3.15.0
+        with:
+          status: ${{job.status}}
+          fields: repo,message,commit,author,action,eventName,ref,workflow,job,took
+          author_name: Github Action Slack
