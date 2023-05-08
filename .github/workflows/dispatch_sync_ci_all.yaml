@@ -1,6 +1,10 @@
 name: "[dispatch] sync ci all"
+
 on:
   workflow_dispatch:
+
+env:
+  SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
 
 jobs:
   sync_all:
