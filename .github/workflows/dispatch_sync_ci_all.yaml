@@ -3,94 +3,37 @@ on:
   workflow_dispatch:
 
 jobs:
-  core_python_core:
-    if: github.repository_owner == 'cloudforet-io'
+  sync_all:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        target: ['core/python-core', 'core/api', 'core/console', 'core/console-api', 'core/python-service', 'tools/spacectl', 'doc/api-doc', 'doc/docs', ' doc/marketplace-assets']
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v2
+      
+      - name: set git user
+        run : git config --global user.email admin@cloudforet.io
+        
+      - name: set python
+        uses: actions/setup-python@v2
         with:
-          ref: ${{ env.BRANCH }}
-      - name: task
+          python-version: '3.8'
+          
+      - name: install requirements
+        run: pip install -r requirements.txt
+        
+      - name: set PAT_TOKEN env
+        run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
+        
+      - name: deploy
         run: |
-          python src/main.py --dest core/python-core --type topic
-
-  core_api:
-    needs: core_python_core
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.BRANCH }}
-      - name: task
-        run: |
-          python src/main.py --dest core/api --type topic
-
-  core_console:
-    needs: core_api
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.BRANCH }}
-      - name: task
-        run: |
-          python src/main.py --dest core/console --type topic
-
-  core_console_api:
-    needs: core_console
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.BRANCH }}
-      - name: task
-        run: |
-          python src/main.py --dest core/console-api --type topic
-
-  core_python_service:
-    needs: core_console_api
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.BRANCH }}
-      - name: task
-        run: |
-          python src/main.py --dest core/python-service --type topic
-
-  tools:
-    needs: core_python_service
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.BRANCH }}
-      - name: task
-        run: |
-          python src/main.py --dest tools/spacectl --type topic
-
-  doc:
-    needs: tools
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ env.BRANCH }}
-      - name: task
-        run: |
-          python src/main.py --dest doc/api-doc --type topic
-          python src/main.py --dest doc/docs --type topic
-          python src/main.py --dest doc/marketplace-assets --type topic
+          python src/main.py --dest ${{ matrix.target }} --type topic
 
   notify_to_slack:
-    needs: doc
+    needs: sync_all
     runs-on: ubuntu-latest
     steps:
       - name: Slack
