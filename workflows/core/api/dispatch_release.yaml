@@ -40,7 +40,7 @@ jobs:
 
       - name: Make all and Packaging
         run: |
-          make all
+          make python
           sudo chmod -R 777 dist
           cd dist/python
           python setup.py sdist bdist_wheel
@@ -53,7 +53,6 @@ jobs:
           verbose: true
           packages-dir: dist/python/
 
-# TODO: Uncomment below lines when api-doc repository is ready
 #      - name: Push artifacts to origin master
 #        uses: stefanzweifel/git-auto-commit-action@v4
 #        with:
