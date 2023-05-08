@@ -23,8 +23,7 @@ class ActionsService:
                 workflows = self.actions_mgr.list_workflows(destination)
 
                 for workflow in workflows:
-                    print(workflow.keys())
-                    # self.github_mgr.commit(destination, workflow)
+                    self.github_mgr.commit(destination, workflow)
 
     def deploy_all(self, org):
         # TODO: Support single topic
