@@ -1,123 +1,81 @@
-from github import Github
-from github.GithubException import UnknownObjectException, GithubException
+import os
+import github
+import logging
 
-import requests, json, math, sys, os, logging, github
+from github import Github
+from err.github_err import *
 
 logging.basicConfig(level=logging.INFO)
 
 
 class GithubConnector:
-
     def __init__(self):
-        self.client = self._get_client()
-        self._committer = github.InputGitAuthor(name='admin-cloudforet', email='admin@cloudforet.io')
+        self.token = os.getenv('PAT_TOKEN', None)
+        self.github_client = Github(self.token)
+        self.committer = github.InputGitAuthor(name='cloudforet-admin', email='admin@cloudforet.io')
 
-    def _get_client(self) -> object:
-        token = os.getenv('PAT_TOKEN', None)
-
-        if not token:
-            logging.error('PAT_TOKEN does not set')
-            sys.exit(1)
-
-        try:
-            return Github(token)
-        except Exception as e:
-            raise e
-
-    def _get_repo(self, repo_name) -> object:
-        try:
-            return self.client.get_repo(repo_name)
-        except UnknownObjectException as e:
-            logging.error(f'Failed to github client creation, Resource not found : {e}')
-            sys.exit(1)
-        except Exception as e:
-            raise e
-
-    def _get_all_repositories(self) -> list:
-        '''
-        get all repositories from github using github api
-        '''
-
-        url = 'https://api.github.com/search/repositories?q=org:cloudforet-io'
-        org_info = self._http_requests(url)
-        total_page = math.ceil(org_info['total_count'] / 100)
-
+    def list_repo(self, org):
         repositories = []
-        for page in range(1, total_page + 1):
-            url = f'https://api.github.com/orgs/cloudforet-io/repos?simple=yes&per_page=100&page={page}'
-            repositories += self._http_requests(url)
+        for repo in self.github_client.get_organization(org).get_repos():
+            repositories.append(repo)
 
         return repositories
 
-    def _delete_all_workflows_in_repository(self, repo) -> None:
-        try:
-            contents = repo.get_contents(".github/workflows", ref="master")
-            for content in contents:
-                message = f'CI: remove workflows ({content.path})'
-                repo.delete_file(path=content.path, message=message, sha=content.sha, branch="master",
-                                 committer=self._committer)
-        except UnknownObjectException as e:
-            logging.warning(e)
+    def search_repo(self, org, keyword):
+        repositories = []
+        for repo in self.github_client.search_repositories(query=f'org:{org} {keyword}'):
+            repositories.append(repo)
 
-    def _create_new_file_in_repository(self, repo, workflows) -> None:
-        for workflow in workflows:
-            for path, content in workflow.items():
-                try:
-                    ret = repo.create_file(path=path, message="[CI] Deploy CI", content=content, branch="master",
-                                           committer=self._committer)
-                    logging.info(f'file has been created to {repo.full_name} : {ret}')
-                except GithubException as e:
-                    logging.error(f'failed to file creation({path}) : {e}')
-                except Exception as e:
-                    raise e
+        return repositories
 
-    def _update_file_in_repository(self, repo, workflows) -> None:
+    def get_repo(self, destination):
         try:
-            for workflow in workflows:
-                for path, content in workflow.items():
-                    contents = repo.get_contents(path, ref="master")
-                    if self._is_updated(contents, content):
-                        ret = repo.update_file(path=contents.path, message="[CI] Update CI", content=content,
-                                               sha=contents.sha, branch="master", committer=self._committer)
-                        logging.info(f'file has been updated in {repo.full_name} : {ret}')
-                    else: 
-                        logging.info(f'Nothing to do, There are no change in {path}')
+            return self.github_client.get_repo(destination)
         except UnknownObjectException as e:
-            logging.warning(f'failed to update to {repo.full_name}: {e}')
-            logging.warning("The file may not exist, try to create a file.")
-            self._create_new_file_in_repository(repo, workflows)
+            if "Branch not found" in str(e):
+                logging.error("UnknownObjectException: Branch not found")
+            elif "Release not found" in str(e):
+                logging.error("UnknownObjectException: Release not found")
+            else:
+                logging.error(f"UnknownObjectException: {e}")
+            raise Exception(e)
+        except BadCredentialsException as e:
+            logging.error(f'BadCredentialsException: {destination}')
+            raise Exception(e)
         except Exception as e:
-            raise e
+            raise Exception(e)
 
-    def _deploy(self, repo, workflows, init) -> None:
-        if init:
-            self._delete_all_workflows_in_repository(repo)
-            self._create_new_file_in_repository(repo, workflows)
-        else:
-            self._update_file_in_repository(repo, workflows)
+    def get_topics(self, destination):
+        repo_vo = self.get_repo(destination)
+        return repo_vo.get_topics()
 
-    @staticmethod
-    def _http_requests(url) -> list:
-        headers = {
-            "Accept": "application/vnd.github.v3+json"
-        }
+    def get_file(self, destination, path):
+        repo_vo = self.get_repo(destination)
 
         try:
-            response = requests.get(url, headers=headers).json()
-        except requests.exceptions.ConnectionError as e:
-            raise Exception(f'Connection Error {e.response}')
-        except requests.exceptions.HTTPError as e:
-            raise Exception(f'HTTP Error {e.response}')
-        except json.JSONDecodeError as e:
-            raise Exception(f'Json Decode Error {e}')
+            return repo_vo.get_contents(path=path, ref="master")
+        except GithubException:
+            return None
+        except Exception as e:
+            raise Exception(e)
 
-        return response
+    def create_file(self, destination, path, content):
+        repo_vo = self.get_repo(destination)
+        try:
+            repo_vo.create_file(path=path, message="[CI] Deploy CI", content=content, branch="master",
+                                committer=self.committer)
+            return 200
+        except Exception as e:
+            raise Exception(e)
 
-    @staticmethod
-    def _is_updated(contents, workflow):
-        contents = contents.decoded_content.decode('utf-8')
+    def update_file(self, destination, path, content):
+        repo_vo = self.get_repo(destination)
+        file_vo = self.get_file(destination, path)
 
-        if contents == workflow:
-            return False
-
-        return True
+        try:
+            repo_vo.update_file(path=path, message="[CI] Deploy CI", content=content, sha=file_vo.sha,
+                                branch="master",
+                                committer=self.committer)
+            return 200
+        except Exception as e:
+            raise Exception(e)
