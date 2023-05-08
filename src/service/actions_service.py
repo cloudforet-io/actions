@@ -12,8 +12,10 @@ class ActionsService:
         self.actions_mgr = ActionsManager()
 
     def deploy(self, org, dest, type):
+        # TODO: Need to test concurrent.futures is working correctly
         if dest == 'all':
-            self.deploy_all(org)
+            # self.deploy_all(org)
+            pass
         else:
             destinations = self.actions_mgr.list_destinations(org, dest, type)
 
@@ -21,7 +23,8 @@ class ActionsService:
                 workflows = self.actions_mgr.list_workflows(destination)
 
                 for workflow in workflows:
-                    self.github_mgr.commit(destination, workflow)
+                    print(workflow.keys())
+                    # self.github_mgr.commit(destination, workflow)
 
     def deploy_all(self, org):
         # TODO: Support single topic

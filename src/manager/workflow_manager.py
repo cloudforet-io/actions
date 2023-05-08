@@ -10,9 +10,17 @@ class WorkflowManager:
     def list_workflows_data(topic):
         try:
             base_path = f'./workflows/{topic}'
-            list_dir = os.listdir(base_path)
-
             workflow_files = []
+
+            common_list_dir = os.listdir('./workflows/common')
+            for workflow_name in common_list_dir:
+                with open(f'./workflows/common/{workflow_name}', 'r') as f:
+                    workflow_contents = f.read()
+                workflow_files.append({
+                    f'.github/workflows/{workflow_name}': workflow_contents
+                })
+
+            list_dir = os.listdir(base_path)
             for workflow_name in list_dir:
                 with open(f'{base_path}/{workflow_name}', 'r') as f:
                     workflow_contents = f.read()
