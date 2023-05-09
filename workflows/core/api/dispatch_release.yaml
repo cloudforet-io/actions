@@ -1,4 +1,4 @@
-ame: "[Dispatch] Release"
+name: "[Dispatch] Release"
 
 on:
   workflow_dispatch:
