@@ -3,6 +3,9 @@ name: "[Dispatch] Daily build"
 on:
   workflow_dispatch:
 
+env:
+  SLACK_WEBHOOK_URL: ${{secrets.SLACK_WEBHOOK_URL}}
+
 jobs:
   docker:
     runs-on: ubuntu-latest
