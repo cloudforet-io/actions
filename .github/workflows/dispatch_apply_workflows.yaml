@@ -1,4 +1,4 @@
-name: Cloudforet Github Action Deploy
+name: "[Dispatch] apply workflows"
 
 on:
   workflow_dispatch:
@@ -7,6 +7,10 @@ on:
         description: 'target repository({repository_name} or {topic1/topic2})'
         required: true
         default: 'identity'
+      type:
+        description: 'type of deployment ({repository} or {topic})'
+        required: true
+        default: 'repository'
 
 jobs:
   deploy:
@@ -23,6 +27,6 @@ jobs:
         run: pip install -r requirements.txt
       - name: set PAT_TOKEN env
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
-      - name: deploy
+      - name: init workflows
         run: |
-          python src/main.py --dest ${{ github.event.inputs.dest }} --type repository
+          python src/main.py --dest ${{ github.event.inputs.dest }} --type ${{ github.event.inputs.type }}
