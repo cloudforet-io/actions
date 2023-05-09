@@ -48,7 +48,7 @@ jobs:
           workflow: dispatch_daily_build.yaml
 
   notify_to_slack:
-    needs: [doc]
+    needs: core_python_service
     runs-on: ubuntu-latest
     steps:
       - name: Slack
