@@ -80,7 +80,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ['api-doc', 'docs', 'marketplace-assets']
+        target: ['docs', 'marketplace-assets']
     needs: tools
     runs-on: ubuntu-latest
     continue-on-error: true
