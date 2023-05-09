@@ -82,7 +82,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        target: ['spacectl', 'image-cleaner']
+        target: ['spacectl']
     needs: core_python_service
     runs-on: ubuntu-latest
     continue-on-error: true
