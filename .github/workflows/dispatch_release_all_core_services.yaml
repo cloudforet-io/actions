@@ -10,8 +10,16 @@ on:
         description: 'enter version(x.y.z)'
         required: true
         default: '1.0.0'
+      container_arch:
+        type: choice
+        description: 'choose container architecture'
+        default: linux/amd64
+        options:
+        - "linux/amd64"
+        - "linux/amd64,linux/arm64"
 
 env:
+  ARCH: ${{ github.event.inputs.container_arch }}
   BRANCH: ${{ github.event.inputs.branch }}
   VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -27,7 +35,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/console
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   core_console_api:
     needs: core_console
@@ -39,7 +47,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/console-api
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   core_python_service:
     strategy:
@@ -57,7 +65,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   tools:
     strategy:
@@ -74,7 +82,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   doc:
     strategy:
@@ -91,7 +99,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}"}'
+          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   notify_to_slack:
     needs: [doc]
