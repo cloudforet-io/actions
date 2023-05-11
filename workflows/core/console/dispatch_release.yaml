@@ -122,9 +122,10 @@ jobs:
             TURBO_API=${{ secrets.TURBO_API }}
           platforms: linux/amd64, linux/arm64
           push: true
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:latest
+          cache-to: type=inline
           tags: |
+            ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:latest
             ${{ vars.DOCKER_REPO_OWNER }}/${{ github.event.repository.name }}:${{ env.VERSION }}
             ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:latest
             ${{ secrets.ECR_REPO }}/${{ github.event.repository.name }}:${{ env.VERSION }}
