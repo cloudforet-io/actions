@@ -18,9 +18,9 @@ It can also bulk trigger these workflows when a new version of Cloudforet's core
 **All workflows for Cloudforet's core services are managed and deployed in this repository.**<br>
 
 We write the workflow according to our workflow policy and put it in the [workflows](./workflows/) directory of `Actions`.<br>
-then these can be deployed into repository of Cloudforet's core services.
+Then these workflows can be deployed into the repository of Cloudforet's core services
 
-Use this features, our devops engineers can modify workflows and deploy in batches.
+Our devops engineers can modify workflows according to our policy and deploy them in batches using this feature.
 
 The diagram below shows the process for this feature.
 
@@ -29,7 +29,7 @@ The diagram below shows the process for this feature.
 
 *) If you want to see the `Actions` script that appears  in the diagram, see [here](./src).
 
-### 2. Bulk trigger workflows when a new version of Cloudforet's core services needs to be released.
+### 2. trigger workflows when a new version of Cloudforet's core services needs to be released.
 When a new version of Cloudforet's core services is released, we need to trigger the workflow of each repository.<br>
 To do this, we made workflow that can trigger workflows of each repository in `Actions`.<br>
 
