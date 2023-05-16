@@ -27,6 +27,6 @@ jobs:
         run: pip install -r requirements.txt
       - name: set PAT_TOKEN env
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
-      - name: init workflows
+      - name: apply workflows
         run: |
           python src/main.py --dest ${{ github.event.inputs.dest }} --type ${{ github.event.inputs.type }}
