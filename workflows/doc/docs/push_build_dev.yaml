@@ -19,10 +19,15 @@ jobs:
     outputs:
       version: ${{ steps.versioning.outputs.VERSION }}
     steps:
+      - uses: actions/checkout@v2
+      - name: get current date
+        run: |
+          sudo ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+          echo "TIME=$(date +'%Y%m%d.%H%M%S')" >> $GITHUB_ENV
       - name: set version with current date
         id: versioning
         run: |
-          echo "::set-output name=VERSION::0.1.${{ env.TIME }}"
+          echo "::set-output name=VERSION::$(cat src/VERSION | cut -c 2-).${{ env.TIME }}"
       - name: Notice when job fails
         if: failure()
         uses: 8398a7/action-slack@v3.2.0
