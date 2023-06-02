@@ -87,7 +87,7 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/api-doc
           workflow: dispatch_release.yaml
-          ref: ${{ env.BRANCH }}
+          ref: ${{ github.ref_name }}
           inputs: '{"version": "${{ env.VERSION }}"}'
 
   notification:
