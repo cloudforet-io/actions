@@ -2,8 +2,8 @@ name: "[dispatch] release all core services"
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'enter branch (only master and release-x.y.z are allowed)'
+      ref_branch:
+        description: 'branch referenced by each repositories (only master and release-x.y.z are allowed)'
         required: true
         default: 'master'
       version:
@@ -20,7 +20,7 @@ on:
 
 env:
   ARCH: ${{ github.event.inputs.container_arch }}
-  BRANCH: ${{ github.event.inputs.branch }}
+  BRANCH: ${{ github.event.inputs.ref_branch }}
   VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
