@@ -3,8 +3,6 @@ on:
   workflow_dispatch:
 
 env:
-  BRANCH: ${{ github.event.inputs.branch }}
-  VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
