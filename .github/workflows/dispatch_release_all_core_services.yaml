@@ -35,7 +35,8 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/console
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
+          ref: ${{ env.BRANCH }}
+          inputs: '{"version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   core_console_api:
     needs: core_console
@@ -47,7 +48,8 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/console-api
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
+          ref: ${{ env.BRANCH }}
+          inputs: '{"version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   core_python_service:
     strategy:
@@ -65,7 +67,8 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
+          ref: ${{ env.BRANCH }}
+          inputs: '{"version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   tools:
     strategy:
@@ -82,7 +85,8 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
+          ref: ${{ env.BRANCH }}
+          inputs: '{"version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   doc:
     strategy:
@@ -99,7 +103,8 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
           repo: cloudforet-io/${{ matrix.target }}
           workflow: dispatch_release.yaml
-          inputs: '{"branch": "${{ env.BRANCH }}", "version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
+          ref: ${{ env.BRANCH }}
+          inputs: '{"version": "${{ env.VERSION }}", "container_arch": "${{ env.ARCH }}"}'
 
   notify_to_slack:
     needs: [doc]
