@@ -17,7 +17,6 @@ on:
 
 
 env:
-  BRANCH: ${{  }}
   ARCH: ${{ github.event.inputs.container_arch }}
   VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
