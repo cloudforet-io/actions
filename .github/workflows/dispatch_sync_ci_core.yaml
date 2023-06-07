@@ -1,4 +1,4 @@
-name: "[dispatch] sync ci all"
+name: "[dispatch] sync ci core"
 
 on:
   workflow_dispatch:
@@ -23,7 +23,8 @@ jobs:
         run: echo "PAT_TOKEN=$(echo ${{ secrets.PAT_TOKEN }})" >> $GITHUB_ENV
       - name: apply workflows
         run: |
-          python src/main.py --dest all --type repository
+          python src/main.py --dest core --type topic
+          
 
   notify_to_slack:
     needs: sync_all

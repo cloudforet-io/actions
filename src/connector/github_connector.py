@@ -26,6 +26,7 @@ class GithubConnector:
         for repo in self.github_client.search_repositories(query=f'org:{org} {keyword}'):
             repositories.append(repo)
 
+        logging.info(f'found {len(repositories)} repositories')
         return repositories
 
     def get_repo(self, destination):
