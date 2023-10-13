@@ -121,10 +121,12 @@ jobs:
           git diff --exit-code --quiet || echo "::set-output name=changed::true"
         continue-on-error: true
 
-      - name: Commit changes
+      - name: Commit changes and Get current commit SHA
         if: steps.check_changes.outputs.changed == 'true'
+        id: get_sha
         run: |
           git commit -am "chore: version ${{ env.VERSION }}"
+          echo "::set-output name=sha::$(git rev-parse HEAD)"
 
       - name: Push changes
         if: steps.check_changes.outputs.changed == 'true'
@@ -132,6 +134,10 @@ jobs:
         with:
           github_token: ${{ secrets.PAT_TOKEN }}
           branch: ${{ github.ref }}
+
+      - name: Set NEW_COMMIT_SHA env variable
+        if: steps.check_changes.outputs.changed == 'true'
+        run: echo "NEW_COMMIT_SHA=${{ steps.get_sha.outputs.sha }}" >> $GITHUB_ENV
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -190,6 +196,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ env.NEW_COMMIT_SHA }}
 
       - name: Configure git
         run: |
