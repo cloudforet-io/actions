@@ -12,6 +12,7 @@ env:
   VERSION: ${{ github.event.inputs.version }}
   PACKAGE_VERSION: ${{ github.event.inputs.version }}
   SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+  BRANCH_NAME: ${{ github.ref_name }}
 
 jobs:
   build_and_push:
@@ -21,6 +22,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT_TOKEN }}
+          ref: ${{ env.BRANCH_NAME }}
 
       - name: Set python
         uses: actions/setup-python@v4
@@ -49,10 +51,10 @@ jobs:
           packages-dir: dist/python/dist/
 
 
-      - name: Push artifacts to origin master
+      - name: Push artifacts to ${{ env.BRANCH_NAME }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: master
+          branch: ${{ env.BRANCH_NAME }}
           commit_message: "[CI] api has been built"
           commit_user_name: cloudforet-admin
           commit_user_email: admin@cloudforet.io
