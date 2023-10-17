@@ -1,13 +1,6 @@
 name: "[Dispatch] Build Dev"
 
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - '.github/**'
-      - 'src/VERSION'
-      - 'docs/**'
   workflow_dispatch:
 
 env:
