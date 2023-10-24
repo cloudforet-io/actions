@@ -22,7 +22,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT_TOKEN }}
-          ref: ${{ env.BRANCH_NAME }}
 
       - name: Set python
         uses: actions/setup-python@v4
@@ -54,7 +53,6 @@ jobs:
       - name: Push artifacts to ${{ env.BRANCH_NAME }}
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: ${{ env.BRANCH_NAME }}
           commit_message: "[CI] api has been built"
           commit_user_name: cloudforet-admin
           commit_user_email: admin@cloudforet.io
