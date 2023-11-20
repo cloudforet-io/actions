@@ -79,6 +79,7 @@ jobs:
           platforms: ${{ env.ARCH }}
           push: true
           tags: cloudforet/${{ github.event.repository.name }}:${{ env.VERSION }}
+          provenance: false
 
       - name: Notice when job fails
         if: failure()
