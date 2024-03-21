@@ -8,7 +8,7 @@ on:
         required: true
         default: 'identity'
       type:
-        description: 'type of deployment ({repository} or {topic})'
+        description: 'type of deployment (repository|topic)'
         required: true
         default: 'repository'
 
