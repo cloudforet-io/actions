@@ -16,7 +16,7 @@ class ActionsManager:
             repositories = self.github_mgr.search_repo(org, keyword)
             return [repository.full_name for repository in repositories]
         elif dest_type == "all":
-            repositories = self.github_mgr.list_reo(org)
+            repositories = self.github_mgr.list_repo(org)
             return [repository.full_name for repository in repositories]
 
 
