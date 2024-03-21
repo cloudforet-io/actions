@@ -7,7 +7,7 @@ The `Actions` script checks what topics are in the repository and finds a workfl
 
 ## Usage
 ```shell
-usage: main.py [-h] [--org "organization"] --dest "destination" --type "repository|topic"
+usage: main.py [-h] [--org "organization"] --dest "destination" --type "repository|topic|all"
 
 File push to github repository
 
@@ -15,7 +15,7 @@ optional arguments:
   -h, --help            show this help message and exit
   --org "organization"  organization of github repository (Default=cloudforet-io)
   --dest "destination"  destination of workflows
-  --type "repository|topic"
+  --type "repository|topic|all"
                         type of destination
 
 Examples:
@@ -23,4 +23,5 @@ Examples:
     python src/main.py --dest inventory --type repository
     python src/main.py --dest config --type repository
     python src/main.py --dest core/console --type topic
+    python src/main.py --dest common --type all         # distribute specific topics to all repositories
 ```
