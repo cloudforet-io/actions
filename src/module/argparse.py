@@ -20,7 +20,7 @@ def parse_args():
     parser.add_argument('--dest', metavar='"destination"',
                         required=True, help='destination of workflows')
 
-    parser.add_argument('--type', metavar='"repository|topic"', choices=['repository', 'topic'], type=str.lower,
+    parser.add_argument('--type', metavar='"repository|topic|all"', choices=['repository', 'topic', 'all'], type=str.lower,
                         required=True, help='type of destination')
 
     return parser.parse_args()
