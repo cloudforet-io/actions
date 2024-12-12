@@ -13,6 +13,7 @@ class GithubConnector:
         self.token = os.getenv('PAT_TOKEN', None)
         self.github_client = Github(self.token)
         self.committer = github.InputGitAuthor(name='cloudforet-admin', email='admin@cloudforet.io')
+        self.signed_off_by = "Signed-off-by: cloudforet-admin <admin@cloudforet.io>"
 
     def list_repo(self, org):
         repositories = []
@@ -63,7 +64,7 @@ class GithubConnector:
     def create_file(self, destination, path, content):
         repo_vo = self.get_repo(destination)
         try:
-            repo_vo.create_file(path=path, message="[CI] Deploy CI", content=content, branch="master",
+            repo_vo.create_file(path=path, message=f"[CI] Deploy CI\n\n{self.signed_off_by}", content=content, branch="master",
                                 committer=self.committer)
             return 200
         except Exception as e:
@@ -74,7 +75,7 @@ class GithubConnector:
         file_vo = self.get_file(destination, path)
 
         try:
-            repo_vo.update_file(path=path, message="[CI] Deploy CI", content=content, sha=file_vo.sha,
+            repo_vo.update_file(path=path, message=f"[CI] Deploy CI\n\n{self.signed_off_by}", content=content, sha=file_vo.sha,
                                 branch="master",
                                 committer=self.committer)
             return 200
